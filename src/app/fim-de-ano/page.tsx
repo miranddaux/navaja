@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ESTILOS } from "@/lib/catalog";
 import { createClient } from "@/lib/supabase/server";
 
@@ -28,6 +29,14 @@ async function Catalogo({
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Barbeiro novo precisa cadastrar a barbearia antes.
+  const { data: barbearia } = await supabase
+    .from("barbershops")
+    .select("name, credit_wallets(balance, quota)")
+    .maybeSingle();
+  if (!barbearia) redirect("/barbearia/nova");
+  const carteira = Array.isArray(barbearia.credit_wallets) ? barbearia.credit_wallets[0] : barbearia.credit_wallets;
+
   return (
     <main className="mx-auto w-full max-w-2xl flex-1 px-6 py-8">
       <header className="mb-8 flex items-center justify-between">
@@ -42,6 +51,10 @@ async function Catalogo({
         </form>
       </header>
 
+      <p className="mb-4 text-sm text-muted">
+        {barbearia.name}
+        {carteira && <> · <span className="text-accent">{carteira.quota - carteira.balance} de {carteira.quota} usadas</span></>}
+      </p>
       <h2 className="text-2xl font-semibold">Catálogo</h2>
       <p className="mt-1 text-sm text-muted">Escolha um estilo para a prova virtual.</p>
 
