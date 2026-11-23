@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+/* Design system Navaja: escuro, premium, destaque caramelo, grid de 8 pt. */
+:root {
+  --background: #0e0d0c;
+  --surface: #181614;
+  --surface-2: #221f1c;
+  --border: #2e2a26;
+  --foreground: #f3eee7;
+  --muted: #a39a8f;
+  --accent: #c8894a; /* caramelo */
+  --accent-fg: #1a1207;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --font-sans: var(--font-geist-sans);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
