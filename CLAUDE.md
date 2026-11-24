@@ -33,3 +33,8 @@ Handoff completo (PDF): `docs/navaja-contexto.pdf`. Resumo:
 - Validações/máscaras em `src/lib/validate.ts` (rodam durante a digitação; o servidor sempre revalida).
 - Grid 8 pt: p-2=8, p-4=16, p-6=24, p-8=32. Mobile-first, coluna máx. 430px; painel até 672px.
 - Netlify: `netlify.toml` com `publish=".next"` e `@netlify/plugin-nextjs` (necessário).
+
+## Ritmo de espaço (proximidade de Gestalt / Nielsen)
+Escala 8 pt: **8** dentro do mesmo bloco (rótulo↔campo↔ajuda, itens de um card) · **16** entre itens relacionados (título↔filtros↔lista) · **24** entre campos de um formulário · **32** entre blocos · **40** entre seções da página. O que é do mesmo grupo fica junto; o que não é, mais longe.
+Breakpoints: 320 (mínimo) · 360/390/430 (celulares) · 768 (tablet: tabela, 3 colunas) · 1024+ (computador, coluna máx. 1120px, 4 colunas). Formulários ficam sempre numa coluna de até 448px. Navegação: barra inferior no celular, topo no computador (`AppChrome`/`AppNav`).
+Painel do dono: rota `/dono`, só para quem está em `platform_admins` (RPC `eh_dono`/`painel_dono`).

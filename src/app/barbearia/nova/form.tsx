@@ -66,13 +66,13 @@ export default function FormBarbearia() {
   ].filter(Boolean) as string[];
 
   return (
-    <main className="mx-auto flex w-full max-w-[430px] flex-1 flex-col gap-6 px-4 pb-8 pt-16">
+    <main className="mx-auto flex w-full max-w-[448px] flex-1 flex-col gap-8 px-4 pb-12 pt-12">
       <div className="flex flex-col gap-2">
         <h1 className="text-h2">Sua barbearia</h1>
         <p className="text-body-sm text-text-2">Só o básico para começar. Você muda tudo depois.</p>
       </div>
 
-      <form action={action} noValidate className="flex flex-col gap-2">
+      <form action={action} noValidate className="flex flex-col gap-6">
         <Field id="name" name="name" label="Nome da barbearia" placeholder="Barbearia do Zé" autoComplete="organization"
           maxLength={80} value={nome} onChange={aoDigitarNome} estado={vNome} />
 
@@ -96,7 +96,7 @@ export default function FormBarbearia() {
           <p role="alert" className="rounded-sm border border-error-line bg-error-bg p-4 text-body-sm text-error">{state.erro}</p>
         )}
 
-        <div className="mt-4 flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
           <Button type="submit" loading={pending} disabled={!pronto}>Criar barbearia</Button>
           {!pronto && faltando.length > 0 && (
             <p className="text-center text-caption text-text-2">Falta preencher: {faltando.join(", ")}.</p>

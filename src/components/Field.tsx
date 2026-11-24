@@ -57,13 +57,14 @@ export function Field({ id, label, value, onChange, estado, ajuda, opcional, pre
           </svg>
         )}
       </div>
-      {/* Região "viva": leitores de tela anunciam a mensagem enquanto a pessoa digita */}
+      {/* Região "viva": leitores de tela anunciam a mensagem enquanto a pessoa digita.
+          Só ocupa espaço quando há texto: assim o ritmo entre campos é sempre o mesmo. */}
       <p
         id={idMsg}
         aria-live="polite"
-        className={`min-h-[16px] text-caption ${
+        className={`text-caption ${
           nivel === "erro" ? "text-error" : nivel === "ok" && msg ? "text-ok" : "text-text-2"
-        }`}
+        } ${msg || ajuda ? "" : "hidden"}`}
       >
         {msg ?? ajuda}
       </p>

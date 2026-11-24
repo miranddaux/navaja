@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/Button";
+import { BannerNevou } from "@/components/BannerNevou";
 import { Field } from "@/components/Field";
 import { ESTILOS } from "@/lib/catalog";
 import { mascaraTelefone, soDigitos, validarNome, validarTelefone } from "@/lib/validate";
@@ -100,7 +101,7 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
 
   if (estado === "pronto" && resultado) {
     return (
-      <main className="mx-auto flex w-full max-w-[430px] flex-1 flex-col gap-6 px-4 pb-8 pt-8">
+      <main className="mx-auto flex w-full max-w-[448px] flex-1 flex-col gap-8 px-4 pb-12 pt-8">
         <h1 className="text-h2">Vou nevar no Réveillon?</h1>
         <div className="relative overflow-hidden rounded-lg border border-line">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -127,16 +128,12 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-[430px] flex-1 flex-col gap-6 px-4 pb-8 pt-8">
-      <div className="flex flex-col gap-2">
-        <p className="text-label text-brand">{p.nome}</p>
-        <h1 className="text-display">Vai nevar? Veja antes!</h1>
-        <p className="text-body-sm text-text-2">Escolha o estilo e veja como fica em você. Leva 1 minuto.</p>
-      </div>
+    <main className="mx-auto flex w-full max-w-[448px] flex-1 flex-col gap-8 px-4 pb-12 pt-8">
+      <BannerNevou nome={p.nome} />
 
-      <form onSubmit={gerar} noValidate className="flex flex-col gap-4">
-        <fieldset className="flex flex-col gap-2">
-          <legend className="mb-2 text-label text-text-2">1. Escolha o estilo</legend>
+      <form onSubmit={gerar} noValidate className="flex flex-col gap-8">
+        <fieldset className="flex flex-col">
+          <legend className="mb-4 text-h4"><span className="mr-2 text-brand">1</span>Escolha o estilo</legend>
           <div className="grid grid-cols-2 gap-2">
             {estilos.map((e) => (
               <button
@@ -149,18 +146,20 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
               </button>
             ))}
           </div>
-          {preco && <p className="text-caption text-text-2">Nevou por <span className="text-brand">{preco}</span></p>}
+          {preco && <p className="mt-2 text-caption text-text-2">Nevou por <span className="text-brand">{preco}</span></p>}
         </fieldset>
 
-        <div className="flex flex-col gap-2">
-          <p className="text-label text-text-2">2. Seus dados</p>
+        <div className="flex flex-col gap-4">
+          <p className="text-h4"><span className="mr-2 text-brand">2</span>Seus dados</p>
+          <div className="flex flex-col gap-6">
           <Field id="nome" label="Seu nome" autoComplete="given-name" placeholder="Como te chamamos?" value={nome} onChange={setNome} estado={vNome} />
           <Field id="wpp" label="Seu WhatsApp" type="tel" inputMode="tel" autoComplete="tel-national" placeholder="(17) 99999-8888"
             value={wpp} onChange={(v) => setWpp(mascaraTelefone(v))} estado={vWpp} ajuda="A barbearia fala com você por aqui." />
+          </div>
         </div>
 
-        <div className="flex flex-col gap-2">
-          <p className="text-label text-text-2">3. Sua selfie</p>
+        <div className="flex flex-col gap-4">
+          <p className="text-h4"><span className="mr-2 text-brand">3</span>Sua selfie</p>
           <label htmlFor="foto" className="flex min-h-[96px] cursor-pointer items-center gap-4 rounded-md border border-dashed border-line bg-surface p-4 transition hover:border-brand">
             {previa ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -176,29 +175,26 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
             </span>
             <input id="foto" type="file" accept="image/*" capture="user" className="sr-only" onChange={(e) => escolherFoto(e.target.files?.[0] ?? null)} />
           </label>
-        </div>
 
-        <label className="flex items-start gap-4 rounded-md border border-line bg-surface p-4 text-caption text-text-2">
+          <label className="flex items-start gap-4 rounded-md border border-line bg-surface p-4 text-caption text-text-2">
           <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 size-5 shrink-0 accent-[#c4894a]" />
           <span>
             Autorizo usar minha foto só para gerar esta simulação. Ela é apagada logo após gerar. Guardamos meu nome e
             WhatsApp para a barbearia falar comigo.
           </span>
         </label>
+        </div>
+
 
         {erro && <p role="alert" className="rounded-sm border border-error-line bg-error-bg p-4 text-body-sm text-error">{erro}</p>}
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
+          <p className="text-center text-caption text-text-2">Sua foto não fica guardada: é apagada assim que a imagem é gerada.</p>
           <Button type="submit" loading={estado === "gerando"} disabled={!pronto}>
-            {estado === "gerando" ? "Gerando… até 30 segundos" : "Ver em mim"}
+            {estado === "gerando" ? "Gerando… até 30 segundos" : "Ver como fico"}
           </Button>
           {!pronto && estado !== "gerando" && (
             <p className="text-center text-caption text-text-2">Falta: {faltando.join(", ")}.</p>
-          )}
-          {p.whatsapp && (
-            <a href={linkWpp()} target="_blank" rel="noreferrer" className="flex min-h-[44px] items-center justify-center text-body-sm text-text-2 underline underline-offset-4 hover:text-text">
-              Prefiro sem foto: chamar a barbearia
-            </a>
           )}
         </div>
       </form>

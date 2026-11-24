@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // Rotas que exigem login.
-const PROTEGIDAS = ["/fim-de-ano", "/painel"];
+const PROTEGIDAS = ["/fim-de-ano", "/painel", "/dono"];
 
 export async function proxy(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;

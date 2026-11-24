@@ -47,7 +47,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-[430px] flex-1 flex-col justify-end gap-10 bg-[radial-gradient(120%_60%_at_50%_0%,rgba(196,137,74,0.18),transparent_70%)] px-4 pb-8 pt-16">
+    <main className="mx-auto flex w-full max-w-[448px] flex-1 flex-col justify-end gap-10 bg-[radial-gradient(120%_60%_at_50%_0%,rgba(196,137,74,0.18),transparent_70%)] px-4 pb-8 pt-16">
       <div className="flex flex-col gap-4">
         <p className="text-h3 text-brand">Navaja</p>
         <h1 className="text-display">Sua barbearia organizada, seus clientes encantados</h1>
@@ -65,7 +65,7 @@ export default function LoginPage() {
           </button>
         </div>
       ) : (
-        <form onSubmit={entrarComEmail} noValidate className="flex flex-col gap-4">
+        <form onSubmit={entrarComEmail} noValidate className="flex flex-col gap-6">
           <Field
             id="email"
             label="Seu e-mail"
