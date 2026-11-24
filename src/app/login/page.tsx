@@ -75,6 +75,8 @@ export default function LoginPage() {
             >
               {estado === "enviando" ? "Enviando…" : "Receber link de acesso"}
             </button>
+            {process.env.NEXT_PUBLIC_GOOGLE_LOGIN === "true" && (
+              <>
             <div className="flex items-center gap-3 py-2 text-xs text-muted">
               <span className="h-px flex-1 bg-border" /> ou <span className="h-px flex-1 bg-border" />
             </div>
@@ -85,6 +87,8 @@ export default function LoginPage() {
             >
               Continuar com Google
             </button>
+              </>
+            )}
             {estado === "erro" && (
               <p role="alert" className="text-sm text-red-400">
                 {mensagem}
