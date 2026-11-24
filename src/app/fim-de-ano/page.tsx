@@ -44,6 +44,7 @@ async function Catalogo({
           Nav<span className="text-accent">aja</span>
         </h1>
         <form action="/auth/signout" method="post" className="flex items-center gap-3">
+          <Link href="/painel" className="text-sm text-accent underline-offset-4 hover:underline">Painel</Link>
           <span className="hidden text-xs text-muted sm:inline">{user?.email}</span>
           <button className="text-sm text-muted underline-offset-4 hover:text-foreground hover:underline">
             Sair

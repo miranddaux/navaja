@@ -10,6 +10,8 @@ async function criar(formData: FormData) {
 
   const name = String(formData.get("name") ?? "").trim();
   const slug = String(formData.get("slug") ?? "").trim().toLowerCase();
+  const whatsapp = String(formData.get("whatsapp") ?? "").replace(/\D/g, "");
+  if (!/^[0-9]{10,13}$/.test(whatsapp)) redirect("/barbearia/nova?erro=whatsapp");
   const preco = Number(String(formData.get("preco") ?? "").replace(",", "."));
   if (name.length < 2 || !/^[a-z0-9-]{3,40}$/.test(slug)) redirect("/barbearia/nova?erro=dados");
 
@@ -17,6 +19,7 @@ async function criar(formData: FormData) {
     owner_id: user.id,
     name,
     slug,
+    whatsapp,
     nevou_price: Number.isFinite(preco) && preco >= 0 ? preco : null,
   });
   if (error) redirect(`/barbearia/nova?erro=${error.code === "23505" ? "slug" : "dados"}`);
@@ -25,6 +28,7 @@ async function criar(formData: FormData) {
 
 const MSG: Record<string, string> = {
   dados: "Confira os campos: nome com 2+ letras e endereço só com letras minúsculas, números e hífen.",
+  whatsapp: "Informe o WhatsApp com DDD, só números (ex.: 17999998888).",
   slug: "Esse endereço já está em uso. Escolha outro.",
 };
 
@@ -50,6 +54,10 @@ async function Formulario({ searchParams }: { searchParams: PageProps<"/barbeari
         <label className="block text-sm text-muted">Endereço do seu link
           <input name="slug" required pattern="[a-z0-9\-]{3,40}" className={`${campo} mt-1`} placeholder="barbearia-do-ze" />
           <span className="text-xs">Seu QR vai abrir /b/<em>endereço</em>/nevou</span>
+        </label>
+        <label className="block text-sm text-muted">Seu WhatsApp (com DDD)
+          <input name="whatsapp" required inputMode="tel" className={`${campo} mt-1`} placeholder="17999998888" />
+          <span className="text-xs">É para onde o cliente manda &quot;Quero esse!&quot;</span>
         </label>
         <label className="block text-sm text-muted">Preço do nevou (R$)
           <input name="preco" inputMode="decimal" className={`${campo} mt-1`} placeholder="150" />
