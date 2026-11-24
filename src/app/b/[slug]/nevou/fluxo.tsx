@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/Button";
+import { Field } from "@/components/Field";
 import { ESTILOS } from "@/lib/catalog";
+import { mascaraTelefone, soDigitos, validarNome, validarTelefone } from "@/lib/validate";
 
 const estilos = ESTILOS.filter((e) => e.categoria === "fim-de-ano");
 
@@ -22,12 +25,28 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
   const [consent, setConsent] = useState(false);
   const [estiloId, setEstiloId] = useState(estilos[0].id);
   const [foto, setFoto] = useState<File | null>(null);
+  const [previa, setPrevia] = useState<string | null>(null);
   const [estado, setEstado] = useState<"form" | "gerando" | "pronto">("form");
   const [erro, setErro] = useState("");
   const [resultado, setResultado] = useState<{ id: string; imagem: string } | null>(null);
 
+  function escolherFoto(file: File | null) {
+    if (previa) URL.revokeObjectURL(previa);
+    setFoto(file);
+    setPrevia(file ? URL.createObjectURL(file) : null);
+  }
+
   const estilo = estilos.find((e) => e.id === estiloId)!;
   const preco = p.preco != null ? `R$ ${p.preco.toFixed(2).replace(".", ",")}` : null;
+  const vNome = validarNome(nome);
+  const vWpp = validarTelefone(wpp);
+  const pronto = vNome.nivel === "ok" && vWpp.nivel === "ok" && !!foto && consent;
+  const faltando = [
+    vNome.nivel !== "ok" && "nome",
+    vWpp.nivel !== "ok" && "WhatsApp",
+    !foto && "selfie",
+    !consent && "autorização",
+  ].filter(Boolean) as string[];
 
   const linkWpp = () => {
     const msg = `Oi! Vi o ${estilo.nome} na simulação da ${p.nome} e quero esse! Sou ${nome || "cliente"}.`;
@@ -36,7 +55,7 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
 
   async function gerar(e: React.FormEvent) {
     e.preventDefault();
-    if (!foto) return setErro("Tire uma selfie ou escolha uma foto.");
+    if (!pronto || !foto) return;
     setErro("");
     setEstado("gerando");
     try {
@@ -44,7 +63,9 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
       const res = await fetch("/api/b/prova", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug: p.slug, nome, whatsapp: wpp, consentimento: consent, styleId: estiloId, imagem, mimeType: "image/jpeg" }),
+        body: JSON.stringify({
+          slug: p.slug, nome, whatsapp: soDigitos(wpp), consentimento: consent, styleId: estiloId, imagem, mimeType: "image/jpeg",
+        }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.erro);
@@ -61,14 +82,6 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
     window.open(linkWpp(), "_blank");
   }
 
-  async function compartilhar() {
-    if (!resultado) return;
-    const blob = await (await fetch(resultado.imagem)).blob();
-    const file = new File([blob], "nevou.png", { type: blob.type });
-    if (navigator.canShare?.({ files: [file] })) await navigator.share({ files: [file], text: `Vou nevar no Réveillon! ${p.nome}` });
-    else salvar();
-  }
-
   function salvar() {
     if (!resultado) return;
     const a = document.createElement("a");
@@ -77,74 +90,117 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
     a.click();
   }
 
-  const campo = "h-12 w-full rounded-xl border border-border bg-surface px-4 outline-none placeholder:text-muted focus:border-accent";
+  async function compartilhar() {
+    if (!resultado) return;
+    const blob = await (await fetch(resultado.imagem)).blob();
+    const file = new File([blob], "nevou.png", { type: blob.type });
+    if (navigator.canShare?.({ files: [file] })) await navigator.share({ files: [file], text: `Vou nevar no Réveillon! ${p.nome}` });
+    else salvar();
+  }
 
   if (estado === "pronto" && resultado) {
     return (
-      <main className="mx-auto w-full max-w-md flex-1 px-6 py-8">
-        <h1 className="text-2xl font-semibold">Vou nevar no Réveillon?</h1>
-        <div className="relative mt-4 overflow-hidden rounded-2xl border border-border">
+      <main className="mx-auto flex w-full max-w-[430px] flex-1 flex-col gap-6 px-4 pb-8 pt-8">
+        <h1 className="text-h2">Vou nevar no Réveillon?</h1>
+        <div className="relative overflow-hidden rounded-lg border border-line">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={resultado.imagem} alt={`Simulação: ${estilo.nome}`} className="w-full" />
-          <span className="absolute left-3 top-3 rounded-full bg-black/60 px-3 py-1 text-xs">simulação</span>
-          <span className="absolute bottom-3 left-3 rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-fg">{p.nome}</span>
+          <span className="absolute left-4 top-4 rounded-full bg-black/60 px-3 py-1 text-label">simulação</span>
+          <span className="absolute bottom-4 left-4 rounded-full border border-brand-pressed bg-brand px-3 py-1 text-label text-bg">{p.nome}</span>
         </div>
-        <p className="mt-4 text-lg font-medium">{estilo.nome}{preco && <span className="text-accent"> · {preco}</span>}</p>
-        <div className="mt-4 space-y-3">
-          {p.whatsapp && <button onClick={quero} className="h-12 w-full rounded-xl bg-accent font-medium text-accent-fg hover:brightness-110">Quero esse!</button>}
-          <div className="grid grid-cols-2 gap-3">
-            <button onClick={compartilhar} className="h-12 rounded-xl border border-border bg-surface hover:bg-surface-2">Compartilhar</button>
-            <button onClick={salvar} className="h-12 rounded-xl border border-border bg-surface hover:bg-surface-2">Salvar</button>
+        <p className="text-h3">
+          {estilo.nome}
+          {preco && <span className="text-brand"> · {preco}</span>}
+        </p>
+        <div className="flex flex-col gap-2">
+          {p.whatsapp && <Button onClick={quero}>Quero esse!</Button>}
+          <div className="grid grid-cols-2 gap-2">
+            <Button variant="secondary" size="md" onClick={compartilhar} className="px-4">Compartilhar</Button>
+            <Button variant="secondary" size="md" onClick={salvar} className="px-4">Salvar</Button>
           </div>
         </div>
-        <p className="mt-4 text-xs text-muted">Imagem gerada por IA, só uma simulação. O resultado real pode variar. Sua foto original não fica guardada.</p>
+        <p className="text-caption text-text-2">
+          Imagem gerada por IA, só uma simulação. O resultado real pode variar. Sua foto original não fica guardada.
+        </p>
       </main>
     );
   }
 
   return (
-    <main className="mx-auto w-full max-w-md flex-1 px-6 py-8">
-      <p className="text-sm text-accent">{p.nome}</p>
-      <h1 className="mt-1 text-3xl font-semibold tracking-tight">Vai nevar? Veja antes!</h1>
-      <p className="mt-2 text-sm text-muted">Escolha o estilo e veja como fica em você.</p>
+    <main className="mx-auto flex w-full max-w-[430px] flex-1 flex-col gap-6 px-4 pb-8 pt-8">
+      <div className="flex flex-col gap-2">
+        <p className="text-label text-brand">{p.nome}</p>
+        <h1 className="text-display">Vai nevar? Veja antes!</h1>
+        <p className="text-body-sm text-text-2">Escolha o estilo e veja como fica em você. Leva 1 minuto.</p>
+      </div>
 
-      <form onSubmit={gerar} className="mt-6 space-y-4">
-        <fieldset>
-          <legend className="mb-2 text-sm text-muted">Estilo</legend>
+      <form onSubmit={gerar} noValidate className="flex flex-col gap-4">
+        <fieldset className="flex flex-col gap-2">
+          <legend className="mb-2 text-label text-text-2">1. Escolha o estilo</legend>
           <div className="grid grid-cols-2 gap-2">
             {estilos.map((e) => (
-              <button type="button" key={e.id} onClick={() => setEstiloId(e.id)} aria-pressed={e.id === estiloId}
-                className={`rounded-xl border px-3 py-3 text-left text-sm transition ${e.id === estiloId ? "border-accent bg-surface-2" : "border-border bg-surface text-muted"}`}>
+              <button
+                type="button" key={e.id} onClick={() => setEstiloId(e.id)} aria-pressed={e.id === estiloId}
+                className={`flex min-h-[44px] items-center rounded-md border px-4 py-2 text-left text-body-sm transition ${
+                  e.id === estiloId ? "border-brand bg-surface-3 text-text" : "border-line bg-surface text-text-2 hover:text-text"
+                }`}
+              >
                 {e.nome}
               </button>
             ))}
           </div>
+          {preco && <p className="text-caption text-text-2">Nevou por <span className="text-brand">{preco}</span></p>}
         </fieldset>
-        {preco && <p className="text-sm text-muted">Nevou por <span className="text-accent">{preco}</span></p>}
 
-        <input className={campo} placeholder="Seu nome" required minLength={2} value={nome} onChange={(e) => setNome(e.target.value)} />
-        <input className={campo} placeholder="Seu WhatsApp com DDD" required inputMode="tel" value={wpp} onChange={(e) => setWpp(e.target.value)} />
+        <div className="flex flex-col gap-2">
+          <p className="text-label text-text-2">2. Seus dados</p>
+          <Field id="nome" label="Seu nome" autoComplete="given-name" placeholder="Como te chamamos?" value={nome} onChange={setNome} estado={vNome} />
+          <Field id="wpp" label="Seu WhatsApp" type="tel" inputMode="tel" autoComplete="tel-national" placeholder="(17) 99999-8888"
+            value={wpp} onChange={(v) => setWpp(mascaraTelefone(v))} estado={vWpp} ajuda="A barbearia fala com você por aqui." />
+        </div>
 
-        <label className="block text-sm text-muted">
-          Selfie (de frente, com boa luz)
-          <input type="file" accept="image/*" capture="user" onChange={(e) => setFoto(e.target.files?.[0] ?? null)}
-            className="mt-1 block w-full text-sm file:mr-3 file:h-10 file:rounded-lg file:border-0 file:bg-surface-2 file:px-4 file:text-foreground" />
+        <div className="flex flex-col gap-2">
+          <p className="text-label text-text-2">3. Sua selfie</p>
+          <label htmlFor="foto" className="flex min-h-[96px] cursor-pointer items-center gap-4 rounded-md border border-dashed border-line bg-surface p-4 transition hover:border-brand">
+            {previa ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={previa} alt="Sua selfie" className="size-16 rounded-full object-cover" />
+            ) : (
+              <span aria-hidden className="flex size-16 items-center justify-center rounded-full bg-surface-3 text-text-2">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M4 8h3l1.5-2h7L17 8h3v11H4V8z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/><circle cx="12" cy="13" r="3.5" stroke="currentColor" strokeWidth="1.6"/></svg>
+              </span>
+            )}
+            <span className="flex flex-col">
+              <span className="text-h4">{foto ? "Trocar foto" : "Tirar selfie"}</span>
+              <span className="text-caption text-text-2">De frente, rosto inteiro e com boa luz.</span>
+            </span>
+            <input id="foto" type="file" accept="image/*" capture="user" className="sr-only" onChange={(e) => escolherFoto(e.target.files?.[0] ?? null)} />
+          </label>
+        </div>
+
+        <label className="flex items-start gap-4 rounded-md border border-line bg-surface p-4 text-caption text-text-2">
+          <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 size-5 shrink-0 accent-[#c4894a]" />
+          <span>
+            Autorizo usar minha foto só para gerar esta simulação. Ela é apagada logo após gerar. Guardamos meu nome e
+            WhatsApp para a barbearia falar comigo.
+          </span>
         </label>
 
-        <label className="flex items-start gap-3 text-xs text-muted">
-          <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 h-4 w-4 accent-[var(--accent)]" required />
-          <span>Autorizo usar minha foto só para gerar esta simulação. Ela é apagada logo após gerar. Guardamos meu nome e WhatsApp para a barbearia falar comigo.</span>
-        </label>
+        {erro && <p role="alert" className="rounded-sm border border-error-line bg-error-bg p-4 text-body-sm text-error">{erro}</p>}
 
-        {erro && <p role="alert" className="text-sm text-red-400">{erro}</p>}
-        <button disabled={estado === "gerando"} className="h-12 w-full rounded-xl bg-accent font-medium text-accent-fg hover:brightness-110 disabled:opacity-60">
-          {estado === "gerando" ? "Gerando… (até 30 s)" : "Ver em mim"}
-        </button>
-        {p.whatsapp && (
-          <a href={linkWpp()} target="_blank" rel="noreferrer" className="block text-center text-sm text-muted underline underline-offset-4">
-            Prefiro sem foto: chamar a barbearia
-          </a>
-        )}
+        <div className="flex flex-col gap-2">
+          <Button type="submit" loading={estado === "gerando"} disabled={!pronto}>
+            {estado === "gerando" ? "Gerando… até 30 segundos" : "Ver em mim"}
+          </Button>
+          {!pronto && estado !== "gerando" && (
+            <p className="text-center text-caption text-text-2">Falta: {faltando.join(", ")}.</p>
+          )}
+          {p.whatsapp && (
+            <a href={linkWpp()} target="_blank" rel="noreferrer" className="flex min-h-[44px] items-center justify-center text-body-sm text-text-2 underline underline-offset-4 hover:text-text">
+              Prefiro sem foto: chamar a barbearia
+            </a>
+          )}
+        </div>
       </form>
     </main>
   );

@@ -1,25 +1,35 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/Button";
+import { Field } from "@/components/Field";
 import { createClient } from "@/lib/supabase/client";
+import { validarEmail } from "@/lib/validate";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [estado, setEstado] = useState<"idle" | "enviando" | "enviado" | "erro">("idle");
-  const [mensagem, setMensagem] = useState("");
+  const [erroEnvio, setErroEnvio] = useState("");
 
+  const validacao = validarEmail(email);
+  const valido = validacao.nivel === "ok";
   const origem = () => process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
 
   async function entrarComEmail(e: React.FormEvent) {
     e.preventDefault();
+    if (!valido) return;
     setEstado("enviando");
     const { error } = await createClient().auth.signInWithOtp({
-      email,
+      email: email.trim(),
       options: { emailRedirectTo: `${origem()}/auth/callback` },
     });
     if (error) {
       setEstado("erro");
-      setMensagem("Não deu certo. Confira o e-mail e tente de novo.");
+      setErroEnvio(
+        error.status === 429
+          ? "Muitos pedidos seguidos. Aguarde alguns minutos e tente de novo."
+          : "Não conseguimos enviar o link. Confira o e-mail e tente de novo.",
+      );
     } else {
       setEstado("enviado");
     }
@@ -32,71 +42,62 @@ export default function LoginPage() {
     });
     if (error) {
       setEstado("erro");
-      setMensagem("Não foi possível entrar com o Google agora.");
+      setErroEnvio("Não foi possível entrar com o Google agora.");
     }
   }
 
   return (
-    <main className="flex flex-1 items-center justify-center px-6 py-16">
-      <div className="w-full max-w-sm">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-semibold tracking-tight">
-            Nav<span className="text-accent">aja</span>
-          </h1>
-          <p className="mt-2 text-sm text-muted">Entre para abrir a sua barbearia.</p>
-        </div>
-
-        {estado === "enviado" ? (
-          <div className="rounded-2xl border border-border bg-surface p-6 text-center">
-            <p className="font-medium">Confira o seu e-mail</p>
-            <p className="mt-2 text-sm text-muted">
-              Enviamos um link para <strong className="text-foreground">{email}</strong>. Toque nele para entrar.
-            </p>
-          </div>
-        ) : (
-          <form onSubmit={entrarComEmail} className="space-y-3">
-            <label htmlFor="email" className="block text-sm text-muted">
-              Seu e-mail
-            </label>
-            <input
-              id="email"
-              type="email"
-              required
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="voce@exemplo.com"
-              className="h-12 w-full rounded-xl border border-border bg-surface px-4 text-foreground outline-none placeholder:text-muted focus:border-accent"
-            />
-            <button
-              type="submit"
-              disabled={estado === "enviando"}
-              className="h-12 w-full rounded-xl bg-accent font-medium text-accent-fg transition hover:brightness-110 disabled:opacity-60"
-            >
-              {estado === "enviando" ? "Enviando…" : "Receber link de acesso"}
-            </button>
-            {process.env.NEXT_PUBLIC_GOOGLE_LOGIN === "true" && (
-              <>
-            <div className="flex items-center gap-3 py-2 text-xs text-muted">
-              <span className="h-px flex-1 bg-border" /> ou <span className="h-px flex-1 bg-border" />
-            </div>
-            <button
-              type="button"
-              onClick={entrarComGoogle}
-              className="h-12 w-full rounded-xl border border-border bg-surface font-medium transition hover:bg-surface-2"
-            >
-              Continuar com Google
-            </button>
-              </>
-            )}
-            {estado === "erro" && (
-              <p role="alert" className="text-sm text-red-400">
-                {mensagem}
-              </p>
-            )}
-          </form>
-        )}
+    <main className="mx-auto flex w-full max-w-[430px] flex-1 flex-col justify-end gap-10 bg-[radial-gradient(120%_60%_at_50%_0%,rgba(196,137,74,0.18),transparent_70%)] px-4 pb-8 pt-16">
+      <div className="flex flex-col gap-4">
+        <p className="text-h3 text-brand">Navaja</p>
+        <h1 className="text-display">Sua barbearia organizada, seus clientes encantados</h1>
       </div>
+
+      {estado === "enviado" ? (
+        <div role="status" className="flex flex-col gap-2 rounded-lg border border-ok-line bg-ok-bg p-6">
+          <p className="text-h4 text-ok">Confira o seu e-mail</p>
+          <p className="text-body-sm text-text-2">
+            Enviamos um link para <strong className="text-text">{email.trim()}</strong>. Toque nele para entrar. Pode
+            cair no spam.
+          </p>
+          <button onClick={() => setEstado("idle")} className="mt-2 self-start text-body-sm text-brand underline underline-offset-4">
+            Usar outro e-mail
+          </button>
+        </div>
+      ) : (
+        <form onSubmit={entrarComEmail} noValidate className="flex flex-col gap-4">
+          <Field
+            id="email"
+            label="Seu e-mail"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            autoCapitalize="none"
+            placeholder="voce@exemplo.com"
+            value={email}
+            onChange={setEmail}
+            estado={validacao}
+            ajuda="Sem senha: enviamos um link de acesso para você."
+          />
+          <Button type="submit" loading={estado === "enviando"} disabled={!valido}>
+            Receber link de acesso
+          </Button>
+          {estado === "erro" && (
+            <p role="alert" className="rounded-sm border border-error-line bg-error-bg p-4 text-body-sm text-error">
+              {erroEnvio}
+            </p>
+          )}
+          {process.env.NEXT_PUBLIC_GOOGLE_LOGIN === "true" && (
+            <Button type="button" variant="secondary" onClick={entrarComGoogle}>
+              Continuar com Google
+            </Button>
+          )}
+        </form>
+      )}
+
+      <p className="text-center text-caption text-text-off">
+        Ao continuar, você concorda com os Termos de Uso e Política de Privacidade da Navaja.
+      </p>
     </main>
   );
 }
