@@ -12,7 +12,7 @@ const VARIANTES = {
   ghost: "text-text-2 hover:text-text active:text-brand disabled:text-text-off",
 } as const;
 
-const TAMANHOS = { lg: "h-[52px] px-4", md: "h-[44px] px-8" } as const;
+const TAMANHOS = { lg: "h-[52px] px-4", md: "h-[44px] px-8", sm: "h-[40px] px-4" } as const;
 
 type Estilo = { variant?: keyof typeof VARIANTES; size?: keyof typeof TAMANHOS; className?: string };
 

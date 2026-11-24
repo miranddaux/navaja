@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ESTILOS } from "@/lib/catalog";
+import { FotoEstilo } from "@/components/FotoEstilo";
 import { Progress } from "@/components/Progress";
 import { createClient } from "@/lib/supabase/server";
 
@@ -67,7 +68,7 @@ async function Catalogo({ searchParams }: { searchParams: PageProps<"/fim-de-ano
         <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:gap-4 lg:grid-cols-4">
           {estilos.map((e) => (
             <li key={e.id} className="overflow-hidden rounded-md border border-line bg-surface">
-              <div className="aspect-[176/160]" style={{ background: `linear-gradient(160deg, ${e.tom}, #1c1c1c)` }} aria-hidden />
+              <FotoEstilo id={e.id} tom={e.tom} className="aspect-[4/5]" />
               <div className="flex flex-col gap-1 p-4">
                 <p className="text-h4">{e.nome}</p>
                 <p className="text-caption text-text-2">{e.descricao}</p>

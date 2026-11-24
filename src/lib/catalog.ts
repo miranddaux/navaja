@@ -17,3 +17,24 @@ export const ESTILOS: Estilo[] = [
   { id: "social", nome: "Social", descricao: "Corte limpo para o dia a dia.", categoria: "cortes", tom: "#58493c" },
   { id: "buzz", nome: "Buzz cut", descricao: "Máquina baixa, zero complicação.", categoria: "cortes", tom: "#4a3f35" },
 ];
+
+export type FormatoRosto = "oval" | "quadrado" | "redondo" | "triangular" | "diamante" | "coracao";
+
+export const FORMATOS: { id: FormatoRosto; nome: string }[] = [
+  { id: "oval", nome: "Oval" },
+  { id: "quadrado", nome: "Quadrado" },
+  { id: "redondo", nome: "Redondo" },
+  { id: "triangular", nome: "Triangular" },
+  { id: "diamante", nome: "Diamante" },
+  { id: "coracao", nome: "Coração" },
+];
+
+// Sugestões por formato (ponto de partida: validar com os barbeiros e ajustar aqui).
+export const SUGESTOES: Record<FormatoRosto, string[]> = {
+  oval: ["nevou", "nevou-barba", "reflexo-alinhado"],
+  quadrado: ["nevou", "loiro-pivete", "buzz-platinado"],
+  redondo: ["reflexo-alinhado", "nevou", "loiro-pivete"],
+  triangular: ["nevou-barba", "reflexo-alinhado", "loiro-pivete"],
+  diamante: ["nevou", "reflexo-alinhado", "nevou-barba"],
+  coracao: ["nevou-barba", "buzz-platinado", "nevou"],
+};

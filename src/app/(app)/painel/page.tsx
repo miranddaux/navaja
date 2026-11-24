@@ -30,13 +30,24 @@ async function Painel() {
     .limit(200);
   const lista = ger ?? [];
 
+  // Interessados que escolheram o caminho sem foto
+  const { data: semFoto } = await supabase
+    .from("interessados")
+    .select("id, nome, whatsapp, style_id, quer, created_at")
+    .order("created_at", { ascending: false })
+    .limit(200);
+  const leads = [
+    ...lista.filter((g) => g.source === "qr"),
+    ...(semFoto ?? []).map((i) => ({ ...i, semFoto: true })),
+  ].sort((a, b) => b.created_at.localeCompare(a.created_at));
+
   return (
     <PainelView
       nome={b.name} slug={b.slug} preco={b.nevou_price}
       saldo={w?.balance ?? 0} cota={w?.quota ?? 0}
       siteUrl={process.env.NEXT_PUBLIC_SITE_URL || ""}
       simulacoes={lista.length}
-      leads={lista.filter((g) => g.source === "qr")}
+      leads={leads}
     />
   );
 }

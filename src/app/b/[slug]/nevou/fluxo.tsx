@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/Button";
 import { BannerNevou } from "@/components/BannerNevou";
 import { Field } from "@/components/Field";
+import SemFoto from "./sem-foto";
 import { ESTILOS } from "@/lib/catalog";
 import { mascaraTelefone, soDigitos, validarNome, validarTelefone } from "@/lib/validate";
 
@@ -27,6 +28,7 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
   const [estiloId, setEstiloId] = useState(estilos[0].id);
   const [foto, setFoto] = useState<File | null>(null);
   const [previa, setPrevia] = useState<string | null>(null);
+  const [semFoto, setSemFoto] = useState(false);
   const [estado, setEstado] = useState<"form" | "gerando" | "pronto">("form");
   const [erro, setErro] = useState("");
   const [resultado, setResultado] = useState<{ id: string; imagem: string } | null>(null);
@@ -127,6 +129,15 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
     );
   }
 
+  if (semFoto) {
+    return (
+      <main className="mx-auto flex w-full max-w-[448px] flex-1 flex-col gap-8 px-4 pb-12 pt-8 sm:max-w-3xl">
+        <BannerNevou nome={p.nome} />
+        <SemFoto slug={p.slug} nome={p.nome} preco={p.preco} whatsapp={p.whatsapp} onVoltar={() => setSemFoto(false)} />
+      </main>
+    );
+  }
+
   return (
     <main className="mx-auto flex w-full max-w-[448px] flex-1 flex-col gap-8 px-4 pb-12 pt-8">
       <BannerNevou nome={p.nome} />
@@ -196,6 +207,7 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
           {!pronto && estado !== "gerando" && (
             <p className="text-center text-caption text-text-2">Falta: {faltando.join(", ")}.</p>
           )}
+          <Button type="button" variant="ghost" size="md" onClick={() => setSemFoto(true)}>Prefiro não enviar foto</Button>
         </div>
       </form>
     </main>

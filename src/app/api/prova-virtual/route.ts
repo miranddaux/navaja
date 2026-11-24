@@ -48,7 +48,7 @@ export async function POST(request: Request) {
 
   // 4. Gera. Se falhar, devolve o crédito.
   try {
-    const out = await gerarImagem({ imagemBase64: imagem, mimeType: mime, estiloNome: estilo.nome });
+    const out = await gerarImagem({ imagemBase64: imagem, mimeType: mime, estiloNome: estilo.nome, estiloId: estilo.id });
     await supabase.rpc("concluir_geracao", { p_id: geracaoId, p_ok: true, p_path: null });
     // A foto original nunca é gravada; o resultado vai direto para o celular.
     return NextResponse.json({

@@ -5,7 +5,7 @@ import { Progress } from "./Progress";
 import { ESTILOS } from "@/lib/catalog";
 import { brl, data } from "@/lib/format";
 
-export type Lead = { id: string; nome: string | null; whatsapp: string | null; style_id: string; quer: boolean; created_at: string };
+export type Lead = { id: string; nome: string | null; whatsapp: string | null; style_id: string; quer: boolean; created_at: string; semFoto?: boolean };
 export type PainelProps = {
   nome: string; slug: string; saldo: number; cota: number; preco: number | null; siteUrl: string;
   simulacoes: number; leads: Lead[];
@@ -52,11 +52,11 @@ export function PainelView(p: PainelProps) {
         <div className="flex min-w-0 flex-col gap-2">
           <h2 id="qr" className="text-h4">QR code da barbearia</h2>
           <p className="break-all text-body-sm text-text-2">{link}</p>
-          <p className="text-caption text-text-2">Imprima e coloque na bancada. Quem escanear faz a simulação e você recebe o contato.</p>
+          <p className="text-caption text-text-2">Baixe o QR para a sua arte ou imprima a arte pronta do display (A6). Quem escanear faz a simulação e você recebe o contato.</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <ButtonLink href="/api/qr" size="md" className="px-4">Baixar PNG</ButtonLink>
-          <ButtonLink href="/api/qr?formato=svg" size="md" variant="secondary" className="px-4">Baixar SVG</ButtonLink>
+          <ButtonLink href="/api/qr" size="md" className="px-4">Baixar</ButtonLink>
+          <ButtonLink href="/painel/display" size="md" variant="secondary" className="px-4">Arte do display</ButtonLink>
           <CopyButton texto={link} />
           <ButtonLink href={`/b/${p.slug}/nevou`} size="md" variant="ghost" className="px-4" target="_blank">Ver a página</ButtonLink>
         </div>
@@ -68,8 +68,8 @@ export function PainelView(p: PainelProps) {
           <div className={`${card} flex flex-col gap-4`}>
             <p className="text-h4">Ainda ninguém escaneou</p>
             <ol className="flex list-decimal flex-col gap-2 pl-6 text-body-sm text-text-2">
-              <li>Baixe o QR code acima.</li>
-              <li>Imprima e coloque na bancada ou no espelho.</li>
+              <li>Baixe o QR code ou a arte do display acima.</li>
+              <li>Imprima e coloque o display na bancada.</li>
               <li>Quando alguém simular, o contato aparece aqui.</li>
             </ol>
           </div>
@@ -78,7 +78,7 @@ export function PainelView(p: PainelProps) {
             {p.leads.map((g) => (
               <li key={g.id} className="flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex flex-col gap-1">
-                  <p className="text-h4">{g.nome}</p>
+                  <p className="flex items-center gap-2 text-h4">{g.nome}{g.semFoto && <span className="rounded-full border border-line px-2 py-0.5 text-caption text-text-2">sem foto</span>}</p>
                   <p className="text-caption text-text-2">{ESTILOS.find((e) => e.id === g.style_id)?.nome ?? g.style_id} · {data(g.created_at)}</p>
                 </div>
                 <div className="flex items-center gap-4">

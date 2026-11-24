@@ -44,7 +44,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const out = await gerarImagem({ imagemBase64: imagem, mimeType, estiloNome: estilo.nome });
+    const out = await gerarImagem({ imagemBase64: imagem, mimeType, estiloNome: estilo.nome, estiloId: estilo.id });
     await supabase.rpc("concluir_geracao_qr", { p_id: id, p_ok: true });
     return NextResponse.json({ id, imagem: `data:${out.mimeType};base64,${out.base64}`, rotulo: "simulação" });
   } catch (e) {
