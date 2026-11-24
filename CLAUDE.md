@@ -27,7 +27,7 @@ Handoff completo (PDF): `docs/navaja-contexto.pdf`. Resumo:
 **Primeira tarefa:** projeto Next.js + Supabase, tela de login e tela "Fim de Ano" com catálogo estático, publicar na Netlify. Depois, a rota de servidor da prova virtual com as travas de crédito.
 
 ## Design system no código (espelha o Figma "APP Barber")
-- Tokens em `src/app/globals.css` (`@theme`): cores `bg/surface/surface-3/line/text/text-2/text-off/brand/brand-pressed/error*/ok*`, raios `sm 8 · md 12 · lg 16 · full`, escala tipográfica como utilitários (`text-display/h2/h3/h4/body/body-sm/caption/label/button`). **Não usar cores/tamanhos soltos**: usar os tokens.
+- Tokens em `src/app/globals.css` (`@theme`): cores `bg/surface/surface-3/line/text/text-2/text-off/brand/brand-pressed/error*/ok*`, raios `sm 8 · md 12 · lg 16 · full` (campos = sm 8; **botões = md 12** — decisão do Miranda, difere do Figma; chips/filtros = full; botão voltar = círculo), escala tipográfica como utilitários (`text-display/h2/h3/h4/body/body-sm/caption/label/button`). **Não usar cores/tamanhos soltos**: usar os tokens.
 - Fonte: Cabinet Grotesk (`src/fonts`, 400/500/700) + Big Shoulders (display, Google). ATENÇÃO: o pacote Befonts traz licença "Personal Use Only" — trocar pelos arquivos da Fontshare (uso comercial livre) antes do lançamento.
 - Componentes base: `src/components/Button.tsx` (primary/secondary/danger/ghost; estados default/hover/active/disabled/loading), `Field.tsx` (rótulo, validação ao vivo, ajuda, aria-live), `PageHeader.tsx`.
 - Validações/máscaras em `src/lib/validate.ts` (rodam durante a digitação; o servidor sempre revalida).

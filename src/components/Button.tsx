@@ -17,7 +17,7 @@ const TAMANHOS = { lg: "h-[52px] px-4", md: "h-[44px] px-8" } as const;
 type Estilo = { variant?: keyof typeof VARIANTES; size?: keyof typeof TAMANHOS; className?: string };
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full text-button select-none transition active:scale-[0.99] disabled:cursor-not-allowed";
+  "inline-flex items-center justify-center gap-2 rounded-md text-button select-none transition active:scale-[0.99] disabled:cursor-not-allowed";
 
 function classes({ variant = "primary", size = "lg", className = "" }: Estilo) {
   return `${base} ${VARIANTES[variant]} ${TAMANHOS[size]} ${className}`;

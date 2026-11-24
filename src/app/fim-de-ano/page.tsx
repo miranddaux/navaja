@@ -47,7 +47,7 @@ async function Catalogo({ searchParams }: { searchParams: PageProps<"/fim-de-ano
             </p>
           )}
         </div>
-        <Link href="/painel" className="shrink-0 rounded-full border border-line bg-surface px-4 py-2 text-label text-text transition hover:bg-surface-3">
+        <Link href="/painel" className="shrink-0 rounded-md border border-line bg-surface px-4 py-2 text-label text-text transition hover:bg-surface-3">
           Painel
         </Link>
       </header>
