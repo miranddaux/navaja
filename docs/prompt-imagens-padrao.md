@@ -11,11 +11,11 @@ Objetivo: 8 imagens **idênticas** (mesmo manequim, ângulo, fundo e luz), mudan
 - Luz: principal suave frontal-esquerda + contraluz caramelo discreto (#C4894A) atrás-direita (separa o cabelo do fundo e reforça a marca).
 - Ângulo: 3/4 (≈30° para a direita), do peito para cima, com margem ao redor da cabeça.
 
-## Passo 1 — criar o manequim base (sem cabelo). Faça UMA vez.
+## Passo 1 — manequim claro (aba Cortes). JÁ FEITO: é o `docs/manequim-base.jpg`. Só repita se precisar recriar.
 ```
-Create a hyper-realistic studio photograph of a minimalist matte mid-tone slate-gray mannequin head-and-shoulders bust (color #7A7F87, smooth ceramic finish, neutral sculpted face, completely bald, no hair), in a 3/4 front view turned about 30 degrees to the right, centered, framed from the chest up with comfortable margin around the head. Seamless neutral dark-gray studio background (soft gradient between #1C1C1C and #2A2A2A with a very subtle vignette). Lighting: large soft key light from front-left, gentle fill, and a subtle warm caramel (#C4894A) rim light from behind-right. The mannequin is a mid-tone gray, clearly darker than platinum or white hair and clearly lighter than dark brown hair, with strong separation from the near-black background. Photorealistic, 85mm lens, shallow depth of field, premium barbershop editorial look, 4K quality. Square 1:1 composition. No text, no logo, no watermark, no hands, no props.
+Create a hyper-realistic studio photograph of a minimalist matte off-white mannequin head-and-shoulders bust (color #E8E4DC, smooth plaster/ceramic finish, neutral sculpted face, completely bald, no hair), in a 3/4 front view turned about 30 degrees to the right, centered, framed from the chest up with comfortable margin around the head. Seamless neutral dark-gray studio background (soft gradient between #1C1C1C and #2A2A2A with a very subtle vignette). Lighting: large soft key light from front-left, gentle fill, and a subtle warm caramel (#C4894A) rim light from behind-right. High contrast between the light mannequin and the dark background. Photorealistic, 85mm lens, shallow depth of field, premium barbershop editorial look, 4K quality. Square 1:1 composition. No text, no logo, no watermark, no hands, no props.
 ```
-Aprove o resultado. Essa imagem é a base de tudo.
+Aprove o resultado. Essa imagem é a base do manequim claro.
 
 ## Passo 1b — manequim escuro (aba Fim de Ano). Faça UMA vez, anexando o manequim claro.
 ```
@@ -25,7 +25,7 @@ Use the attached image as the exact base. Keep the SAME sculpture, SAME pose, SA
 ## Passo 2 — um cabelo por vez, NO MESMO CHAT, anexando a imagem base certa
 Aba **Fim de Ano** → anexe o manequim **escuro**. Aba **Cortes** → anexe o manequim **claro**.
 ```
-Use the attached image as the exact base. Keep the SAME mannequin, SAME pose, SAME camera angle and framing, SAME background, SAME lighting and SAME color grading. Change ONLY the hair to: [CABELO]. Do not alter anything else. Hyper-realistic strand-level hair detail, glossy natural highlights; the hair must stand out clearly against the mannequin and the background. 4K quality. Square 1:1.
+Use the attached image as the exact base. Keep the SAME mannequin, SAME pose, SAME camera angle and framing, SAME background, SAME lighting and SAME color grading. Change ONLY the hair to: [CABELO]. Do not alter anything else. Hyper-realistic strand-level hair detail, glossy natural highlights; the hair must stand out clearly against the mannequin and the background (light hair on the dark mannequin, dark hair on the light mannequin). 4K quality. Square 1:1.
 ```
 Troque `[CABELO]` por uma linha abaixo (um pedido por imagem):
 
