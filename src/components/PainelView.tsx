@@ -3,6 +3,7 @@ import { CopyButton } from "./CopyButton";
 import { Progress } from "./Progress";
 import { ESTILOS } from "@/lib/catalog";
 import { brl, data } from "@/lib/format";
+import { waLink } from "@/lib/whatsapp";
 
 export type Lead = { id: string; nome: string | null; whatsapp: string | null; style_id: string; quer: boolean; created_at: string; semFoto?: boolean };
 export type PainelProps = {
@@ -111,7 +112,7 @@ export function PainelView(p: PainelProps) {
                   </p>
                 </div>
                 {g.whatsapp && (
-                  <ButtonLink href={`https://wa.me/${g.whatsapp.startsWith("55") ? g.whatsapp : "55" + g.whatsapp}`} target="_blank" rel="noreferrer" size="sm" variant="secondary" className="w-full sm:w-auto">
+                  <ButtonLink href={waLink(g.whatsapp, `Oi, ${g.nome}! Aqui é da ${p.nome}. Vi que você escolheu o ${ESTILOS.find((e) => e.id === g.style_id)?.nome ?? "corte"} no nosso Nevou. Posso te ajudar a agendar?`)} target="_blank" rel="noreferrer" size="sm" variant="secondary" className="w-full sm:w-auto">
                     Chamar no WhatsApp
                   </ButtonLink>
                 )}

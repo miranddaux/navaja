@@ -7,6 +7,7 @@ import { CardEstilo } from "@/components/CardEstilo";
 import { CardRosto } from "@/components/CardRosto";
 import { FORMATOS, sugestoesComFoto, type FormatoRosto } from "@/lib/catalog";
 import { brl } from "@/lib/precos";
+import { waLink } from "@/lib/whatsapp";
 import { createClient } from "@/lib/supabase/client";
 import { mascaraTelefone, soDigitos, validarNome, validarTelefone } from "@/lib/validate";
 
@@ -48,14 +49,16 @@ export default function SemFoto(p: { slug: string; nome: string; precos: Record<
     finally { setCarregando(false); }
   }
 
-  async function quero(styleId: string, styleNome: string) {
+  // Abre o WhatsApp NA HORA do toque (navegadores de celular bloqueiam janelas abertas depois de esperar a rede);
+  // o registro do interesse segue em segundo plano.
+  function quero(styleId: string, styleNome: string) {
     setEnviado(styleId);
-    try {
-      const id = await registrar(styleId);
-      await createClient().rpc("marcar_interesse", { p_id: id });
-    } catch { /* o contato já foi salvo antes; seguimos para o WhatsApp */ }
+    registrar(styleId)
+      .then((id) => createClient().rpc("marcar_interesse", { p_id: id }))
+      .catch(() => { /* o contato já foi salvo antes; o cliente segue para o WhatsApp */ })
+      .finally(() => setEnviado(null));
     const msg = `Oi! Vi o ${styleNome} na ${p.nome} e quero esse! Sou ${nome}.`;
-    if (p.whatsapp) window.open(`https://wa.me/${p.whatsapp}?text=${encodeURIComponent(msg)}`, "_blank");
+    if (p.whatsapp) window.open(waLink(p.whatsapp, msg), "_blank");
   }
 
   if (vendo && formato) {
@@ -119,7 +122,7 @@ export default function SemFoto(p: { slug: string; nome: string; precos: Record<
       <div className="flex flex-col gap-2">
         <Button type="submit" loading={carregando} disabled={!pronto}>Ver sugestões</Button>
         {!pronto && <p className="text-center text-caption text-text-2">Falta: {faltando.join(", ")}.</p>}
-        <Button type="button" variant="secondary" onClick={p.onVoltar}>Voltar e enviar uma selfie</Button>
+        <Button type="button" variant="ghost" size="md" className="underline underline-offset-4" onClick={p.onVoltar}>Voltar e enviar uma selfie</Button>
       </div>
     </form>
   );

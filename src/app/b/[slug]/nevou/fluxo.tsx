@@ -7,6 +7,7 @@ import { Field } from "@/components/Field";
 import SemFoto from "./sem-foto";
 import { ESTILOS } from "@/lib/catalog";
 import { brl } from "@/lib/precos";
+import { waLink } from "@/lib/whatsapp";
 import { mascaraTelefone, soDigitos, validarNome, validarTelefone } from "@/lib/validate";
 
 const estilos = ESTILOS.filter((e) => e.selfie);
@@ -77,7 +78,7 @@ export default function FluxoNevou(p: { slug: string; nome: string; precos: Reco
 
   const linkWpp = () => {
     const msg = `Oi! Vi o ${estilo.nome} na simulação da ${p.nome} e quero esse! Sou ${nome || "cliente"}.`;
-    return `https://wa.me/${p.whatsapp}?text=${encodeURIComponent(msg)}`;
+    return waLink(p.whatsapp ?? "", msg);
   };
 
   async function gerar(e: React.FormEvent) {
@@ -243,7 +244,7 @@ export default function FluxoNevou(p: { slug: string; nome: string; precos: Reco
           {!pronto && estado !== "gerando" && (
             <p className="text-center text-caption text-text-2">Falta: {faltando.join(", ")}.</p>
           )}
-          <Button type="button" variant="secondary" size="md" onClick={() => setSemFoto(true)}>Prefiro não enviar foto</Button>
+          <Button type="button" variant="ghost" size="md" className="underline underline-offset-4" onClick={() => setSemFoto(true)}>Prefiro não enviar foto</Button>
         </div>
       </form>
     </main>
