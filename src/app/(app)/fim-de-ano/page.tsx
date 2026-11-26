@@ -68,7 +68,7 @@ async function Catalogo({ searchParams }: { searchParams: PageProps<"/fim-de-ano
         <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:gap-4 lg:grid-cols-4">
           {estilos.map((e) => (
             <li key={e.id} className="overflow-hidden rounded-md border border-line bg-surface">
-              <FotoEstilo id={e.id} tom={e.tom} className="aspect-[4/5]" />
+              <FotoEstilo id={e.id} tom={e.tom} className="aspect-square" />
               <div className="flex flex-col gap-1 p-4">
                 <p className="text-h4">{e.nome}</p>
                 <p className="text-caption text-text-2">{e.descricao}</p>

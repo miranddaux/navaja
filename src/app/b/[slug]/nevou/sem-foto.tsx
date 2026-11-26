@@ -69,7 +69,7 @@ export default function SemFoto(p: { slug: string; nome: string; preco: number |
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {sugestoes.map((e) => (
             <li key={e.id} className="flex flex-col overflow-hidden rounded-md border border-line bg-surface">
-              <FotoEstilo id={e.id} tom={e.tom} className="aspect-[4/3] sm:aspect-[4/5]" />
+              <FotoEstilo id={e.id} tom={e.tom} className="aspect-square" />
               <div className="flex flex-col gap-4 p-4">
                 <div className="flex flex-col gap-1">
                   <p className="text-h4">{e.nome}</p>

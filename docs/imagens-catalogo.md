@@ -14,7 +14,7 @@
 | `social.jpg` | Social |
 | `buzz.jpg` | Buzz cut |
 
-Formato: JPG, 4:5 (retrato), 800×1000 px, até ~150 KB. Rosto à vista, fundo neutro, mesma luz entre as fotos.
+Formato: JPG quadrado **1080×1080 px**, até ~200 KB (guarde o original em alta resolução fora do projeto). Mesmo manequim, mesmo fundo e mesma luz em todas; só o cabelo muda. Veja o prompt completo em `docs/prompt-imagens-padrao.md`.
 Sem o arquivo, o app mostra o degradê de cor (nada quebra). Com o arquivo, ele aparece sozinho no catálogo,
 nas sugestões "sem foto" e é enviado ao Gemini como referência do estilo.
 
