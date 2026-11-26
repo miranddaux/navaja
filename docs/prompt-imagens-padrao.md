@@ -5,7 +5,9 @@ Objetivo: 8 imagens **idênticas** (mesmo manequim, ângulo, fundo e luz), mudan
 ## Especificação (todas iguais)
 - Quadrada 1:1 → entregar **1080×1080 px**, JPG, até ~200 KB (guarde o original em alta resolução).
 - Fundo: cinza escuro neutro nos tons do Navaja (#1C1C1C → #2A2A2A), degradê suave com vinheta leve.
-- Manequim: busto fosco **cinza-ardósia de tom médio (#7A7F87)**, sem expressão. O off-white anterior escondia o cabelo platinado; o tom médio contrasta com cabelo claro (platinado, loiro) e com cabelo escuro. Alternativa de marca: argila caramelo fosca (#B07A45) — teste os dois com Nevou + Degradê antes de gerar os 8.
+- Manequim: **a cor muda conforme o cabelo, para o cabelo sempre contrastar**, e é a mesma dentro de cada aba do app:
+  - **Aba "Cortes" (cabelo escuro)** → manequim **claro**, off-white fosco (#E8E4DC). É o manequim base atual (`docs/manequim-base.jpg`).
+  - **Aba "Fim de Ano" (cabelo platinado, loiro, reflexo)** → manequim **escuro**, cinza-ardósia fosco (#5B6068).
 - Luz: principal suave frontal-esquerda + contraluz caramelo discreto (#C4894A) atrás-direita (separa o cabelo do fundo e reforça a marca).
 - Ângulo: 3/4 (≈30° para a direita), do peito para cima, com margem ao redor da cabeça.
 
@@ -15,22 +17,28 @@ Create a hyper-realistic studio photograph of a minimalist matte mid-tone slate-
 ```
 Aprove o resultado. Essa imagem é a base de tudo.
 
-## Passo 2 — um cabelo por vez, NO MESMO CHAT, anexando a imagem base
+## Passo 1b — manequim escuro (aba Fim de Ano). Faça UMA vez, anexando o manequim claro.
+```
+Use the attached image as the exact base. Keep the SAME sculpture, SAME pose, SAME camera angle and framing, SAME background, SAME lighting. Change ONLY the mannequin material color to matte dark slate-gray (#5B6068), still completely bald with no hair. The mannequin must read clearly lighter than the near-black background and clearly darker than white or blonde hair. Square 1:1.
+```
+
+## Passo 2 — um cabelo por vez, NO MESMO CHAT, anexando a imagem base certa
+Aba **Fim de Ano** → anexe o manequim **escuro**. Aba **Cortes** → anexe o manequim **claro**.
 ```
 Use the attached image as the exact base. Keep the SAME mannequin, SAME pose, SAME camera angle and framing, SAME background, SAME lighting and SAME color grading. Change ONLY the hair to: [CABELO]. Do not alter anything else. Hyper-realistic strand-level hair detail, glossy natural highlights; the hair must stand out clearly against the mannequin and the background. 4K quality. Square 1:1.
 ```
 Troque `[CABELO]` por uma linha abaixo (um pedido por imagem):
 
-| Arquivo | [CABELO] |
-|---|---|
-| `nevou.jpg` | full icy platinum-blonde bleached hair (near white), short textured top, low taper fade on the sides |
-| `nevou-barba.jpg` | full icy platinum-blonde bleached hair, short textured top, low taper fade, plus a short neatly trimmed platinum-blonde beard |
-| `reflexo-alinhado.jpg` | dark brown short textured hair with even, aligned light-blonde highlights (uniform foil highlights), low fade on the sides |
-| `loiro-pivete.jpg` | warm golden-honey bleached blonde top, medium length textured, skin fade on the sides |
-| `buzz-platinado.jpg` | platinum-blonde buzz cut, very short and even all around |
-| `degrade.jpg` | natural dark brown hair, classic mid skin fade, short textured top |
-| `social.jpg` | natural dark brown classic side-part, short and neat, clean low taper |
-| `buzz.jpg` | natural dark brown buzz cut, very short and even all around |
+| Arquivo | Manequim | [CABELO] |
+|---|---|---|
+| `nevou.jpg` | escuro | full icy platinum-blonde bleached hair (near white), short textured top, low taper fade on the sides |
+| `nevou-barba.jpg` | escuro | full icy platinum-blonde bleached hair, short textured top, low taper fade, plus a short neatly trimmed platinum-blonde beard |
+| `reflexo-alinhado.jpg` | escuro | dark brown short textured hair with even, aligned light-blonde highlights (uniform foil highlights), low fade on the sides |
+| `loiro-pivete.jpg` | escuro | warm golden-honey bleached blonde top, medium length textured, skin fade on the sides |
+| `buzz-platinado.jpg` | escuro | platinum-blonde buzz cut, very short and even all around |
+| `degrade.jpg` | claro | natural dark brown hair, classic mid skin fade, short textured top |
+| `social.jpg` | claro | natural dark brown classic side-part, short and neat, clean low taper |
+| `buzz.jpg` | claro | natural dark brown buzz cut, very short and even all around |
 
 ## Dicas de consistência
 - Sempre o mesmo chat e sempre anexando a imagem base. Se o manequim "mudar", reanexe a base e repita o pedido.
