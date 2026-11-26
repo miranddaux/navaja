@@ -30,6 +30,7 @@ export async function POST(request: Request) {
   }
 
   const supabase = await createClient();
+  await supabase.rpc("liberar_pendentes"); // devolve créditos de gerações interrompidas
   const { data: id, error } = await supabase.rpc("iniciar_geracao_qr", {
     p_slug: slug,
     p_style: estilo.id,

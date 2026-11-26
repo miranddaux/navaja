@@ -35,6 +35,7 @@ export async function POST(request: Request) {
   if (!barbearia) return NextResponse.json({ erro: "Cadastre sua barbearia primeiro." }, { status: 400 });
 
   // 3. Saldo + trava de 10 s + teto diário + desconta 1 crédito (tudo atômico no banco)
+  await supabase.rpc("liberar_pendentes"); // devolve créditos de gerações interrompidas
   const hash = hashEntrada(imagem, estilo.id);
   const { data: geracaoId, error } = await supabase.rpc("iniciar_geracao", {
     p_barbershop: barbearia.id,

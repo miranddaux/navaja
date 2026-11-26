@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/Button";
 import { BannerNevou } from "@/components/BannerNevou";
 import { Field } from "@/components/Field";
@@ -19,6 +19,29 @@ async function reduzir(file: File): Promise<string> {
   c.height = Math.round(bmp.height * escala);
   c.getContext("2d")!.drawImage(bmp, 0, 0, c.width, c.height);
   return c.toDataURL("image/jpeg", 0.85).split(",")[1];
+}
+
+// Feedback enquanto a IA trabalha (visibilidade do status): etapa + tempo + barra estimada.
+function ProgressoGeracao() {
+  const [seg, setSeg] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setSeg((x) => x + 1), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const etapa = seg < 4 ? "Enviando sua foto…" : seg < 12 ? "Aplicando o estilo…" : seg < 25 ? "Ajustando os detalhes…" : "Quase lá, obrigado por esperar…";
+  const pct = Math.min(95, Math.round((seg / 30) * 100));
+  return (
+    <div role="status" aria-live="polite" className="flex flex-col gap-2 rounded-md border border-line bg-surface p-4">
+      <div className="flex items-center justify-between gap-4">
+        <p className="text-body-sm">{etapa}</p>
+        <p className="text-caption text-text-2">{seg}s</p>
+      </div>
+      <div className="h-2 w-full overflow-hidden rounded-full bg-surface-3">
+        <div className="h-full rounded-full bg-brand transition-all duration-1000" style={{ width: `${pct}%` }} />
+      </div>
+      <p className="text-caption text-text-2">Costuma levar de 10 a 30 segundos. Não feche esta tela.</p>
+    </div>
+  );
 }
 
 export default function FluxoNevou(p: { slug: string; nome: string; preco: number | null; whatsapp: string | null }) {
@@ -70,8 +93,15 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
           slug: p.slug, nome, whatsapp: soDigitos(wpp), consentimento: consent, styleId: estiloId, imagem, mimeType: "image/jpeg",
         }),
       });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.codigo ? `${json.erro} (código: ${json.codigo})` : json.erro);
+      // Se o servidor demorar demais, a resposta pode não ser JSON: tratamos sem mostrar erro técnico
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(
+          json.erro
+            ? json.codigo ? `${json.erro} (código: ${json.codigo})` : json.erro
+            : "Demorou mais que o normal. Tente de novo; se a simulação falhou, seu crédito volta sozinho.",
+        );
+      }
       setResultado(json);
       setEstado("pronto");
     } catch (err) {
@@ -196,6 +226,8 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
         </label>
         </div>
 
+
+        {estado === "gerando" && <ProgressoGeracao />}
 
         {erro && <p role="alert" className="rounded-sm border border-error-line bg-error-bg p-4 text-body-sm text-error">{erro}</p>}
 
