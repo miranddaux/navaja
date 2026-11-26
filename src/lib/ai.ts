@@ -60,7 +60,12 @@ export async function gerarImagem(opts: {
       signal: AbortSignal.timeout(60_000),
     },
   );
-  if (!res.ok) throw new Error(`ia_erro_${res.status}`);
+  if (!res.ok) {
+    // Resumo do erro do Google (sem dados sensíveis) para diagnóstico
+    let detalhe = "";
+    try { detalhe = String((await res.json())?.error?.message ?? "").slice(0, 180); } catch { /* sem corpo */ }
+    throw new Error(`ia_erro_${res.status}${detalhe ? `: ${detalhe}` : ""}`);
+  }
   const json = await res.json();
   const partes = json?.candidates?.[0]?.content?.parts ?? [];
   const img = partes.find((p: { inlineData?: unknown; inline_data?: unknown }) => p.inlineData || p.inline_data);

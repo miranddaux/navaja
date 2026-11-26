@@ -50,7 +50,10 @@ export async function POST(request: Request) {
   } catch (e) {
     await supabase.rpc("concluir_geracao_qr", { p_id: id, p_ok: false });
     console.error("prova QR falhou:", e instanceof Error ? e.message : e);
-    return NextResponse.json({ erro: "Não conseguimos gerar agora. Tente de novo em instantes." }, { status: 502 });
+    return NextResponse.json(
+      { erro: "Não conseguimos gerar agora. Tente de novo em instantes.", codigo: e instanceof Error ? e.message : "desconhecido" },
+      { status: 502 },
+    );
   }
 }
 

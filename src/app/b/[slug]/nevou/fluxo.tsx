@@ -71,7 +71,7 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
         }),
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json.erro);
+      if (!res.ok) throw new Error(json.codigo ? `${json.erro} (código: ${json.codigo})` : json.erro);
       setResultado(json);
       setEstado("pronto");
     } catch (err) {

@@ -59,7 +59,7 @@ export async function POST(request: Request) {
     await supabase.rpc("concluir_geracao", { p_id: geracaoId, p_ok: false });
     console.error("prova-virtual falhou:", e instanceof Error ? e.message : e);
     return NextResponse.json(
-      { erro: "Não conseguimos gerar agora. Seu crédito foi devolvido." },
+      { erro: "Não conseguimos gerar agora. Seu crédito foi devolvido.", codigo: e instanceof Error ? e.message : "desconhecido" },
       { status: 502 },
     );
   }
