@@ -19,7 +19,7 @@ export function BannerNevou({ nome }: { nome: string }) {
         <span className="w-fit rounded-full border border-brand-pressed bg-brand px-3 py-1 text-label text-bg">Operação Nevou · Réveillon</span>
         <div className="flex flex-col gap-2">
           <h1 className="text-display">Vai nevar? <span className="text-brand">Veja antes!</span></h1>
-          <p className="text-body-sm text-text-2">Descubra como o platinado fica em você, em 1 minuto, antes de sentar na cadeira da {nome}.</p>
+          <p className="text-body text-text-2">Descubra como o platinado fica em você, em 1 minuto, antes de sentar na cadeira da {nome}.</p>
         </div>
       </div>
     </section>

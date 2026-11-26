@@ -35,7 +35,7 @@ export function Field({ id, label, value, onChange, estado, ajuda, opcional, pre
 
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="text-label text-text-2">
+      <label htmlFor={id} className="text-card text-text-2">
         {label}
         {opcional && <span className="ml-1 font-normal text-text-off"> (opcional)</span>}
       </label>

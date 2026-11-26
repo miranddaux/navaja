@@ -27,8 +27,8 @@ async function Display() {
   return (
     <main className="mx-auto flex w-full max-w-[1120px] flex-col gap-8 px-4 pt-8 md:px-8 md:pt-12 print:max-w-none print:p-0">
       <header className="flex flex-col gap-2 print:hidden">
-        <h1 className="text-h2">Arte do display (A6)</h1>
-        <p className="text-body-sm text-text-2">Pronta para imprimir em 10,5 × 14,8 cm. Use papel fotográfico ou couchê fosco, a 100% (sem ajustar à página).</p>
+        <h1 className="text-h1">Arte do display (A6)</h1>
+        <p className="text-body text-text-2">Pronta para imprimir em 10,5 × 14,8 cm. Use papel fotográfico ou couchê fosco, a 100% (sem ajustar à página).</p>
       </header>
 
       <div className="mx-auto w-full max-w-[420px] print:max-w-none">

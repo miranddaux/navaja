@@ -17,5 +17,5 @@ async function Conteudo({ params }: { params: PageProps<"/b/[slug]/nevou">["para
   const { data } = await supabase.rpc("barbearia_publica", { p_slug: slug });
   const b = data?.[0];
   if (!b) notFound();
-  return <FluxoNevou slug={slug} nome={b.name} preco={b.nevou_price} whatsapp={b.whatsapp} />;
+  return <FluxoNevou slug={slug} nome={b.name} precos={(b.precos ?? {}) as Record<string, number>} whatsapp={b.whatsapp} />;
 }

@@ -16,3 +16,6 @@ export function IconCopiar() {
 export function IconCheck() {
   return (<svg {...base}><path d="M4 12.5l5 5 11-11" /></svg>);
 }
+export function IconPrecos() {
+  return (<svg {...base}><path d="M3 12V4h8l9 9-8 8-9-9z" /><circle cx="7.5" cy="8.5" r="1.2" /></svg>);
+}

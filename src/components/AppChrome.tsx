@@ -13,6 +13,7 @@ export async function AppChrome({ children }: { children: ReactNode }) {
 
   const itens: NavItem[] = [
     { href: "/fim-de-ano", label: "Estilos", icone: "estilos" },
+    { href: "/precos", label: "Preços", icone: "precos" },
     { href: "/painel", label: "Painel", icone: "painel" },
     ...(dono ? [{ href: "/dono", label: "Dono", icone: "dono" } as NavItem] : []),
   ];

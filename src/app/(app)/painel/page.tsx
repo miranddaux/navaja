@@ -17,7 +17,7 @@ async function Painel() {
   const supabase = await createClient();
   const { data: b } = await supabase
     .from("barbershops")
-    .select("name, slug, nevou_price, credit_wallets(balance, quota)")
+    .select("name, slug, credit_wallets(balance, quota), precos_estilos(style_id, preco)")
     .maybeSingle();
   if (!b) redirect("/barbearia/nova");
   const w = Array.isArray(b.credit_wallets) ? b.credit_wallets[0] : b.credit_wallets;
@@ -43,7 +43,7 @@ async function Painel() {
 
   return (
     <PainelView
-      nome={b.name} slug={b.slug} preco={b.nevou_price}
+      nome={b.name} slug={b.slug} precos={Object.fromEntries((b.precos_estilos ?? []).map((x) => [x.style_id, Number(x.preco)]))}
       saldo={w?.balance ?? 0} cota={w?.quota ?? 0}
       siteUrl={process.env.NEXT_PUBLIC_SITE_URL || ""}
       simulacoes={lista.length}

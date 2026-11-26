@@ -5,7 +5,8 @@ import { Button } from "@/components/Button";
 import { Field } from "@/components/Field";
 import { CardEstilo } from "@/components/CardEstilo";
 import { CardRosto } from "@/components/CardRosto";
-import { ESTILOS, FORMATOS, SUGESTOES, type FormatoRosto } from "@/lib/catalog";
+import { FORMATOS, sugestoesComFoto, type FormatoRosto } from "@/lib/catalog";
+import { brl } from "@/lib/precos";
 import { createClient } from "@/lib/supabase/client";
 import { mascaraTelefone, soDigitos, validarNome, validarTelefone } from "@/lib/validate";
 
@@ -15,7 +16,7 @@ const ERROS: Record<string, string> = {
 };
 
 // Caminho sem foto (LGPD): escolhe o formato do rosto, vê sugestões e deixa o contato.
-export default function SemFoto(p: { slug: string; nome: string; preco: number | null; whatsapp: string | null; onVoltar: () => void }) {
+export default function SemFoto(p: { slug: string; nome: string; precos: Record<string, number>; whatsapp: string | null; onVoltar: () => void }) {
   const [formato, setFormato] = useState<FormatoRosto | null>(null);
   const [nome, setNome] = useState("");
   const [wpp, setWpp] = useState("");
@@ -29,7 +30,6 @@ export default function SemFoto(p: { slug: string; nome: string; preco: number |
   const vWpp = validarTelefone(wpp);
   const pronto = !!formato && vNome.nivel === "ok" && vWpp.nivel === "ok" && consent;
   const faltando = [!formato && "formato do rosto", vNome.nivel !== "ok" && "nome", vWpp.nivel !== "ok" && "WhatsApp", !consent && "autorização"].filter(Boolean) as string[];
-  const preco = p.preco != null ? `R$ ${p.preco.toFixed(2).replace(".", ",")}` : null;
 
   async function registrar(styleId: string) {
     const { data, error } = await createClient().rpc("registrar_interessado", {
@@ -43,7 +43,7 @@ export default function SemFoto(p: { slug: string; nome: string; preco: number |
     e.preventDefault();
     if (!pronto) return;
     setErro(""); setCarregando(true);
-    try { await registrar(SUGESTOES[formato!][0]); setVendo(true); }
+    try { await registrar(sugestoesComFoto(formato!)[0].id); setVendo(true); }
     catch (err) { setErro(err instanceof Error ? err.message : "Algo deu errado."); }
     finally { setCarregando(false); }
   }
@@ -59,7 +59,7 @@ export default function SemFoto(p: { slug: string; nome: string; preco: number |
   }
 
   if (vendo && formato) {
-    const sugestoes = SUGESTOES[formato].map((id) => ESTILOS.find((e) => e.id === id)!);
+    const sugestoes = sugestoesComFoto(formato);
     const nomeFormato = FORMATOS.find((f) => f.id === formato)!.nome.toLowerCase();
     return (
       <div className="flex flex-col gap-6">
@@ -68,14 +68,14 @@ export default function SemFoto(p: { slug: string; nome: string; preco: number |
             Para: <span className="text-text">{nome.trim()} · Rosto {nomeFormato}</span>
           </p>
           <div className="flex flex-col gap-2">
-            <h2 className="text-h3">Sugestões pra você</h2>
-            <p className="text-body-sm text-text-2">Estes estilos combinam com rosto {nomeFormato}. Escolha um e fale com a barbearia.</p>
+            <h2 className="text-h2">Sugestões pra você</h2>
+            <p className="text-body text-text-2">Estes estilos combinam com rosto {nomeFormato}. Escolha um e fale com a barbearia.</p>
           </div>
         </div>
         <ul className="grid grid-cols-2 gap-2">
           {sugestoes.map((e) => (
             <CardEstilo key={e.id} id={e.id} tom={e.tom} nome={e.nome}>
-              {preco && <p className="text-caption text-brand">{preco}</p>}
+              {p.precos[e.id] != null && <p className="text-card text-brand">{brl(p.precos[e.id])}</p>}
               <Button size="sm" loading={enviado === e.id} onClick={() => quero(e.id, e.nome)} className="mt-1 w-full">Quero esse!</Button>
             </CardEstilo>
           ))}
@@ -88,8 +88,8 @@ export default function SemFoto(p: { slug: string; nome: string; preco: number |
   return (
     <form onSubmit={verSugestoes} noValidate className="flex flex-col gap-8">
       <div className="flex flex-col gap-2">
-        <h2 className="text-h3">Sem foto, sem problema</h2>
-        <p className="text-body-sm text-text-2">Escolha o formato do seu rosto e veja os estilos que mais combinam.</p>
+        <h2 className="text-h2">Sem foto, sem problema</h2>
+        <p className="text-body text-text-2">Escolha o formato do seu rosto e veja os estilos que mais combinam.</p>
       </div>
 
       <fieldset className="flex flex-col gap-4">

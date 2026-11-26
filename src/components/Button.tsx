@@ -12,7 +12,9 @@ const VARIANTES = {
   ghost: "text-text-2 hover:text-text active:text-brand disabled:text-text-off",
 } as const;
 
-const TAMANHOS = { lg: "h-[52px] px-4", md: "h-[44px] px-8", sm: "h-[40px] px-4" } as const;
+// O espaçamento horizontal padrão só vale se quem usa não definir o próprio `px-*` (evita conflito de classes).
+const TAMANHOS = { lg: "h-[52px]", md: "h-[44px]", sm: "h-[40px]" } as const;
+const PX_PADRAO = { lg: "px-4", md: "px-8", sm: "px-4" } as const;
 
 type Estilo = { variant?: keyof typeof VARIANTES; size?: keyof typeof TAMANHOS; className?: string };
 
@@ -20,7 +22,8 @@ const base =
   "inline-flex items-center justify-center gap-2 rounded-md text-button select-none transition active:scale-[0.99] disabled:cursor-not-allowed";
 
 function classes({ variant = "primary", size = "lg", className = "" }: Estilo) {
-  return `${base} ${VARIANTES[variant]} ${TAMANHOS[size]} ${className}`;
+  const px = /(^|\s)px-/.test(className) ? "" : PX_PADRAO[size];
+  return `${base} ${VARIANTES[variant]} ${TAMANHOS[size]} ${px} ${className}`;
 }
 
 export function Spinner() {

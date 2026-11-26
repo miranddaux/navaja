@@ -56,7 +56,7 @@ export default function LoginPage() {
       {estado === "enviado" ? (
         <div role="status" className="flex flex-col gap-2 rounded-lg border border-ok-line bg-ok-bg p-6">
           <p className="text-h4 text-ok">Confira o seu e-mail</p>
-          <p className="text-body-sm text-text-2">
+          <p className="text-body text-text-2">
             Enviamos um link para <strong className="text-text">{email.trim()}</strong>. Toque nele para entrar. Pode
             cair no spam.
           </p>

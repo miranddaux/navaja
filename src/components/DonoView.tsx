@@ -12,15 +12,15 @@ export function DonoView({ d }: { d: PainelDono }) {
   return (
     <main className="mx-auto flex w-full max-w-[1120px] flex-col gap-10 px-4 pt-8 md:px-8 md:pt-12">
       <header className="flex flex-col gap-2">
-        <h1 className="text-h2">Painel do dono</h1>
-        <p className="text-body-sm text-text-2">Visão geral da plataforma: barbearias, uso da IA e custo.</p>
+        <h1 className="text-h1">Painel do dono</h1>
+        <p className="text-body text-text-2">Visão geral da plataforma: barbearias, uso da IA e custo.</p>
       </header>
 
       <section aria-label="Indicadores" className="flex flex-col gap-4">
         <div className="grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-4">
           <div className={`${card} col-span-2 flex flex-col gap-2 md:col-span-1`}>
             <p className="text-caption text-text-2">Gerações hoje</p>
-            <p className="text-h2">{d.hoje} <span className="text-body-sm text-text-2">/ {d.teto}</span></p>
+            <p className="text-h2">{d.hoje} <span className="text-body text-text-2">/ {d.teto}</span></p>
             <Progress valor={d.hoje} max={d.teto} rotulo="Uso do teto diário" />
             <p className="text-caption text-text-2">Teto diário · custo hoje {brl(custoHoje)}</p>
           </div>
@@ -32,9 +32,9 @@ export function DonoView({ d }: { d: PainelDono }) {
       </section>
 
       <section aria-labelledby="barbearias" className="flex flex-col gap-4">
-        <h2 id="barbearias" className="text-h3">Barbearias ({d.barbearias.length})</h2>
+        <h2 id="barbearias" className="text-h2">Barbearias ({d.barbearias.length})</h2>
         {d.barbearias.length === 0 ? (
-          <div className={card}><p className="text-body-sm text-text-2">Nenhuma barbearia cadastrada ainda.</p></div>
+          <div className={card}><p className="text-body text-text-2">Nenhuma barbearia cadastrada ainda.</p></div>
         ) : (
           <>
             {/* Celular: um cartão por barbearia */}

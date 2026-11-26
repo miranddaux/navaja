@@ -7,7 +7,7 @@ import { brl, data } from "@/lib/format";
 
 export type Lead = { id: string; nome: string | null; whatsapp: string | null; style_id: string; quer: boolean; created_at: string; semFoto?: boolean };
 export type PainelProps = {
-  nome: string; slug: string; saldo: number; cota: number; preco: number | null; siteUrl: string;
+  nome: string; slug: string; saldo: number; cota: number; precos: Record<string, number>; siteUrl: string;
   simulacoes: number; leads: Lead[];
 };
 
@@ -16,7 +16,8 @@ const card = "rounded-md border border-line bg-surface p-4";
 // Ritmo de espaço: 8 dentro do bloco · 16 entre itens relacionados · 32 entre blocos · 40 entre seções.
 export function PainelView(p: PainelProps) {
   const quer = p.leads.filter((l) => l.quer);
-  const estimado = (p.preco ?? 0) * quer.length;
+  const estimado = quer.reduce((t, l) => t + (p.precos[l.style_id] ?? 0), 0);
+  const semPrecos = Object.keys(p.precos).length === 0;
   const link = `${p.siteUrl}/b/${p.slug}/nevou`;
   const usadas = p.cota - p.saldo;
   const baixo = p.saldo <= Math.max(2, Math.floor(p.cota * 0.2));
@@ -24,8 +25,8 @@ export function PainelView(p: PainelProps) {
   return (
     <main className="mx-auto flex w-full max-w-[1120px] flex-col gap-10 px-4 pt-8 md:px-8 md:pt-12">
       <header className="flex flex-col gap-2">
-        <h1 className="text-h2">Painel</h1>
-        <p className="text-body-sm text-text-2">Resultado da Operação Nevou em {p.nome}.</p>
+        <h1 className="text-h1">Painel</h1>
+        <p className="text-body text-text-2">Resultado da Operação Nevou em {p.nome}.</p>
       </header>
 
       <section aria-label="Resumo" className="flex flex-col gap-4">
@@ -40,7 +41,7 @@ export function PainelView(p: PainelProps) {
           <div className={`${card} flex flex-col gap-2`}><p className="text-caption text-text-2">Quiseram nevar</p><p className="text-h2">{quer.length}</p></div>
           <div className={`${card} flex flex-col gap-2`}><p className="text-caption text-text-2">Estimado</p><p className="text-h2 text-brand">{brl(estimado)}</p></div>
         </div>
-        <p className="text-caption text-text-2">Estimado = quem clicou em &quot;Quero esse!&quot; × preço do nevou{p.preco ? "" : " (defina o preço para ver o valor)"}.</p>
+        <p className="text-caption text-text-2">Estimado = quem clicou em &quot;Quero esse!&quot; × preço do corte escolhido{semPrecos ? " (defina os preços em \"Preços\" para ver o valor)" : ""}.</p>
         {baixo && (
           <p role="alert" className="rounded-sm border border-error-line bg-error-bg p-4 text-body-sm text-error">
             Suas provas estão acabando. Fale com o suporte para liberar mais.
@@ -63,7 +64,7 @@ export function PainelView(p: PainelProps) {
       </section>
 
       <section aria-labelledby="interessados" className="flex flex-col gap-4">
-        <h2 id="interessados" className="text-h3">Interessados</h2>
+        <h2 id="interessados" className="text-h2">Interessados</h2>
         {p.leads.length === 0 ? (
           <div className={`${card} flex flex-col gap-4`}>
             <p className="text-h4">Ainda ninguém escaneou</p>

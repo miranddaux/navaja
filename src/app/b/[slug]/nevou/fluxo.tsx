@@ -6,6 +6,7 @@ import { BannerNevou } from "@/components/BannerNevou";
 import { Field } from "@/components/Field";
 import SemFoto from "./sem-foto";
 import { ESTILOS } from "@/lib/catalog";
+import { brl } from "@/lib/precos";
 import { mascaraTelefone, soDigitos, validarNome, validarTelefone } from "@/lib/validate";
 
 const estilos = ESTILOS.filter((e) => e.selfie);
@@ -44,7 +45,7 @@ function ProgressoGeracao() {
   );
 }
 
-export default function FluxoNevou(p: { slug: string; nome: string; preco: number | null; whatsapp: string | null }) {
+export default function FluxoNevou(p: { slug: string; nome: string; precos: Record<string, number>; whatsapp: string | null }) {
   const [nome, setNome] = useState("");
   const [wpp, setWpp] = useState("");
   const [consent, setConsent] = useState(false);
@@ -63,7 +64,7 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
   }
 
   const estilo = estilos.find((e) => e.id === estiloId)!;
-  const preco = p.preco != null ? `R$ ${p.preco.toFixed(2).replace(".", ",")}` : null;
+  const preco = p.precos[estiloId] != null ? brl(p.precos[estiloId]) : null;
   const vNome = validarNome(nome);
   const vWpp = validarTelefone(wpp);
   const pronto = vNome.nivel === "ok" && vWpp.nivel === "ok" && !!foto && consent;
@@ -134,7 +135,7 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
   if (estado === "pronto" && resultado) {
     return (
       <main className="mx-auto flex w-full max-w-[448px] flex-1 flex-col gap-8 px-4 pb-12 pt-8">
-        <h1 className="text-h2">Vou nevar no Réveillon?</h1>
+        <h1 className="text-h1">Vou nevar no Réveillon?</h1>
         <div className="relative overflow-hidden rounded-lg border border-line">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={resultado.imagem} alt={`Simulação: ${estilo.nome}`} className="w-full" />
@@ -163,7 +164,7 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
     return (
       <main className="mx-auto flex w-full max-w-[448px] flex-1 flex-col gap-8 px-4 pb-12 pt-8 sm:max-w-3xl">
         <BannerNevou nome={p.nome} />
-        <SemFoto slug={p.slug} nome={p.nome} preco={p.preco} whatsapp={p.whatsapp} onVoltar={() => setSemFoto(false)} />
+        <SemFoto slug={p.slug} nome={p.nome} precos={p.precos} whatsapp={p.whatsapp} onVoltar={() => setSemFoto(false)} />
       </main>
     );
   }
@@ -183,11 +184,14 @@ export default function FluxoNevou(p: { slug: string; nome: string; preco: numbe
                   e.id === estiloId ? "border-brand bg-surface-3 text-text" : "border-line bg-surface text-text-2 hover:text-text"
                 }`}
               >
-                {e.nome}
+                <span className="flex flex-col">
+                  <span>{e.nome}</span>
+                  {p.precos[e.id] != null && <span className="text-caption text-brand">{brl(p.precos[e.id])}</span>}
+                </span>
               </button>
             ))}
           </div>
-          {preco && <p className="mt-2 text-caption text-text-2">Nevou por <span className="text-brand">{preco}</span></p>}
+          
         </fieldset>
 
         <div className="flex flex-col gap-4">

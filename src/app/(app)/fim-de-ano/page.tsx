@@ -1,6 +1,8 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
-import { ESTILOS } from "@/lib/catalog";
+import Link from "next/link";
+import { ESTILOS, temFoto } from "@/lib/catalog";
+import { brl } from "@/lib/precos";
 import { CardEstilo } from "@/components/CardEstilo";
 import { CardIa } from "@/components/CardIa";
 import { Pill } from "@/components/Pill";
@@ -26,26 +28,28 @@ const ABAS = [
 async function Catalogo({ searchParams }: { searchParams: PageProps<"/fim-de-ano">["searchParams"] }) {
   const { aba } = await searchParams;
   const categoria = aba === "cortes" ? "cortes" : "fim-de-ano";
-  const estilos = ESTILOS.filter((e) => e.categoria === categoria);
+  const estilos = ESTILOS.filter((e) => e.categoria === categoria && temFoto(e.id));
 
   const supabase = await createClient();
   const { data: barbearia } = await supabase
     .from("barbershops")
-    .select("name, slug, credit_wallets(balance, quota)")
+    .select("name, slug, credit_wallets(balance, quota), precos_estilos(style_id, preco)")
     .maybeSingle();
   if (!barbearia) redirect("/barbearia/nova");
   const w = Array.isArray(barbearia.credit_wallets) ? barbearia.credit_wallets[0] : barbearia.credit_wallets;
   const usadas = w ? w.quota - w.balance : 0;
+  const precos: Record<string, number> = Object.fromEntries((barbearia.precos_estilos ?? []).map((p) => [p.style_id, Number(p.preco)]));
+  const colunas = estilos.length % 4 === 0 ? "lg:grid-cols-4" : estilos.length % 3 === 0 ? "lg:grid-cols-3" : "lg:grid-cols-2";
 
   return (
     <main className="mx-auto flex w-full max-w-[1120px] flex-col gap-10 px-4 pt-8 md:px-8 md:pt-12">
       {/* Bloco 1: quem sou eu e quanto resta (8 entre itens do mesmo grupo) */}
       <header className="flex flex-col gap-2">
-        <h1 className="text-h2">{barbearia.name}</h1>
+        <h1 className="text-h1">{barbearia.name}</h1>
         {w && (
           <div className="flex max-w-[320px] flex-col gap-2">
             <Progress valor={usadas} max={w.quota} rotulo="Provas usadas" />
-            <p className="text-body-sm text-text-2"><span className="text-brand">{usadas} de {w.quota}</span> provas usadas este mês</p>
+            <p className="text-body text-text-2"><span className="text-brand">{usadas} de {w.quota}</span> provas usadas este mês</p>
           </div>
         )}
       </header>
@@ -55,8 +59,8 @@ async function Catalogo({ searchParams }: { searchParams: PageProps<"/fim-de-ano
       {/* Bloco 2: catálogo (16 entre título, filtros e lista) */}
       <section aria-labelledby="catalogo" className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          <h2 id="catalogo" className="text-h3">Catálogo</h2>
-          <p className="text-body-sm text-text-2">Estilos disponíveis para a prova virtual.</p>
+          <h2 id="catalogo" className="text-h2">Catálogo</h2>
+          <p className="text-body text-text-2">Estilos disponíveis para a prova virtual.</p>
         </div>
 
         <nav aria-label="Categorias" className="flex gap-2">
@@ -65,9 +69,15 @@ async function Catalogo({ searchParams }: { searchParams: PageProps<"/fim-de-ano
           ))}
         </nav>
 
-        <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:gap-4 lg:grid-cols-4">
-          {estilos.map((e) => (
-            <CardEstilo key={e.id} id={e.id} tom={e.tom} nome={e.nome} />
+        <ul className={`grid grid-cols-2 gap-2 md:gap-4 ${colunas}`}>
+          {estilos.map((e, i) => (
+            <CardEstilo key={e.id} id={e.id} tom={e.tom} nome={e.nome} larga={estilos.length % 2 === 1 && i === estilos.length - 1}>
+              {precos[e.id] != null ? (
+                <p className="text-card text-brand">{brl(precos[e.id])}</p>
+              ) : (
+                <Link href="/precos" className="text-caption text-text-2 underline underline-offset-4 hover:text-text">Definir preço</Link>
+              )}
+            </CardEstilo>
           ))}
         </ul>
       </section>

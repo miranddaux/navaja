@@ -38,3 +38,10 @@ Handoff completo (PDF): `docs/navaja-contexto.pdf`. Resumo:
 Escala 8 pt: **8** dentro do mesmo bloco (rótulo↔campo↔ajuda, itens de um card) · **16** entre itens relacionados (título↔filtros↔lista) · **24** entre campos de um formulário · **32** entre blocos · **40** entre seções da página. O que é do mesmo grupo fica junto; o que não é, mais longe.
 Breakpoints: 320 (mínimo) · 360/390/430 (celulares) · 768 (tablet: tabela, 3 colunas) · 1024+ (computador, coluna máx. 1120px, 4 colunas). Formulários ficam sempre numa coluna de até 448px. Navegação: barra inferior no celular, topo no computador (`AppChrome`/`AppNav`).
 Painel do dono: rota `/dono`, só para quem está em `platform_admins` (RPC `eh_dono`/`painel_dono`).
+
+## Escala tipográfica (decisão do Miranda, base 8 pt)
+12 caption/label · **14 nome em cartão (`text-card`)** · **16 texto/body e botões** · 20 h3 · **24 subtítulo de seção (h2)** · **32 título de página (h1)** · 40 display. Texto de apoio = 16px; nome do cartão = 14px.
+## Preços por corte
+Tabela `precos_estilos` (barbershop_id, style_id, preco). Cadastro rápido (`PrecosEditor`: "mesmo valor em todos" + ajuste por corte) e edição em `/precos`. A página do cliente (`barbearia_publica`) recebe todos os preços; o painel estima a receita por "Quero esse!" × preço do corte escolhido.
+## Catálogo
+O app só mostra estilos com foto em `public/catalogo` (lista gerada no build por `scripts/gerar-fotos.mjs`). Abas com número ímpar: o último cartão ocupa a linha inteira no celular. Selfie com IA só nos estilos com `selfie: true`.

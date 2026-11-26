@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { IconDono, IconEstilos, IconPainel } from "./Icons";
+import { IconDono, IconEstilos, IconPainel, IconPrecos } from "./Icons";
 
-export type NavItem = { href: string; label: string; icone: "estilos" | "painel" | "dono" };
-const ICONES = { estilos: IconEstilos, painel: IconPainel, dono: IconDono };
+export type NavItem = { href: string; label: string; icone: "estilos" | "painel" | "dono" | "precos" };
+const ICONES = { estilos: IconEstilos, painel: IconPainel, dono: IconDono, precos: IconPrecos };
 
 // Mesma navegação em todo o app: barra inferior no celular, topo no computador.
 export function AppNav({ itens, variante }: { itens: NavItem[]; variante: "topo" | "base" }) {
