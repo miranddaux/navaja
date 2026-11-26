@@ -184,9 +184,9 @@ export default function FluxoNevou(p: { slug: string; nome: string; precos: Reco
                   e.id === estiloId ? "border-brand bg-surface-3 text-text" : "border-line bg-surface text-text-2 hover:text-text"
                 }`}
               >
-                <span className="flex flex-col">
+                <span className="flex flex-col gap-1">
                   <span>{e.nome}</span>
-                  {p.precos[e.id] != null && <span className="text-caption text-brand">{brl(p.precos[e.id])}</span>}
+                  {p.precos[e.id] != null && <span className="text-h4 text-text">{brl(p.precos[e.id])}</span>}
                 </span>
               </button>
             ))}

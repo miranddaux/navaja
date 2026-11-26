@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ESTILOS, temFoto } from "@/lib/catalog";
 import { brl } from "@/lib/precos";
-import { CardEstilo } from "@/components/CardEstilo";
+import { CardEmBreve, CardEstilo } from "@/components/CardEstilo";
 import { CardIa } from "@/components/CardIa";
 import { Pill } from "@/components/Pill";
 import { Progress } from "@/components/Progress";
@@ -39,7 +39,8 @@ async function Catalogo({ searchParams }: { searchParams: PageProps<"/fim-de-ano
   const w = Array.isArray(barbearia.credit_wallets) ? barbearia.credit_wallets[0] : barbearia.credit_wallets;
   const usadas = w ? w.quota - w.balance : 0;
   const precos: Record<string, number> = Object.fromEntries((barbearia.precos_estilos ?? []).map((p) => [p.style_id, Number(p.preco)]));
-  const colunas = estilos.length % 4 === 0 ? "lg:grid-cols-4" : estilos.length % 3 === 0 ? "lg:grid-cols-3" : "lg:grid-cols-2";
+  const total = estilos.length + (estilos.length % 2);
+  const colunas = total % 4 === 0 ? "lg:grid-cols-4" : total % 3 === 0 ? "lg:grid-cols-3" : "lg:grid-cols-2";
 
   return (
     <main className="mx-auto flex w-full max-w-[1120px] flex-col gap-10 px-4 pt-8 md:px-8 md:pt-12">
@@ -70,15 +71,16 @@ async function Catalogo({ searchParams }: { searchParams: PageProps<"/fim-de-ano
         </nav>
 
         <ul className={`grid grid-cols-2 gap-2 md:gap-4 ${colunas}`}>
-          {estilos.map((e, i) => (
-            <CardEstilo key={e.id} id={e.id} tom={e.tom} nome={e.nome} larga={estilos.length % 2 === 1 && i === estilos.length - 1}>
+          {estilos.map((e) => (
+            <CardEstilo key={e.id} id={e.id} tom={e.tom} nome={e.nome}>
               {precos[e.id] != null ? (
-                <p className="text-card text-brand">{brl(precos[e.id])}</p>
+                <p className="text-h4 text-text">{brl(precos[e.id])}</p>
               ) : (
                 <Link href="/precos" className="text-caption text-text-2 underline underline-offset-4 hover:text-text">Definir preço</Link>
               )}
             </CardEstilo>
           ))}
+          {estilos.length % 2 === 1 && <CardEmBreve />}
         </ul>
       </section>
     </main>

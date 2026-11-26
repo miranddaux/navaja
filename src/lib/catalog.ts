@@ -17,8 +17,8 @@ export const ESTILOS: Estilo[] = [
   { id: "nevou-topete", nome: "Nevou topete", descricao: "Platinado com topo longo e volume.", categoria: "fim-de-ano", tom: "#d2cec4" },
   { id: "buzz-platinado", nome: "Buzz cut platinado", descricao: "Máquina baixa e cor platinada.", categoria: "fim-de-ano", tom: "#e4e1da", selfie: true },
   { id: "degrade", nome: "Degradê", descricao: "Clássico com transição suave.", categoria: "cortes", tom: "#6b5a4a" },
-  { id: "degrade-barba", nome: "Degradê + barba", descricao: "Degradê com a barba alinhada.", categoria: "cortes", tom: "#5f4e40" },
   { id: "social", nome: "Social", descricao: "Corte limpo para o dia a dia.", categoria: "cortes", tom: "#58493c" },
+  { id: "zero", nome: "Raspado (zero)", descricao: "Máquina zero, bem limpo.", categoria: "cortes", tom: "#4a4a4a" },
   { id: "buzz", nome: "Buzz cut", descricao: "Máquina baixa, zero complicação.", categoria: "cortes", tom: "#4a3f35" },
 ];
 

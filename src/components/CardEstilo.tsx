@@ -2,15 +2,24 @@ import type { ReactNode } from "react";
 import { FotoEstilo } from "./FotoEstilo";
 
 // Cartão de estilo (Figma: card-estilo): fundo surface-1, foto quadrada com raio 8 e nome (14px) embaixo.
-// `larga`: quando sobra um cartão sozinho na última linha (celular), ele ocupa a linha toda, sem buraco.
-export function CardEstilo({ id, tom, nome, larga, children }: { id: string; tom: string; nome: string; larga?: boolean; children?: ReactNode }) {
+export function CardEstilo({ id, tom, nome, children }: { id: string; tom: string; nome: string; children?: ReactNode }) {
   return (
-    <li className={`flex gap-2 rounded-md bg-surface-1 p-3 ${larga ? "col-span-2 items-center gap-4 sm:col-span-1 sm:flex-col sm:items-stretch sm:gap-2" : "flex-col"}`}>
-      <FotoEstilo id={id} tom={tom} className={`aspect-square rounded-sm ${larga ? "w-[96px] shrink-0 sm:w-auto" : ""}`} />
-      <div className="flex min-w-0 flex-1 flex-col gap-1">
+    <li className="flex flex-col gap-2 rounded-md bg-surface-1 p-3">
+      <FotoEstilo id={id} tom={tom} className="aspect-square rounded-sm" />
+      <div className="flex flex-col gap-1">
         <p className="text-card text-text">{nome}</p>
         {children}
       </div>
+    </li>
+  );
+}
+
+// Preenche o espaço quando a quantidade de estilos com foto é ímpar (até a próxima foto chegar).
+export function CardEmBreve() {
+  return (
+    <li aria-hidden className="flex flex-col items-center justify-center gap-1 rounded-md border border-dashed border-line p-3 text-center">
+      <p className="text-card text-text-2">Novo estilo</p>
+      <p className="text-caption text-text-off">em breve</p>
     </li>
   );
 }

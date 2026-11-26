@@ -75,7 +75,7 @@ export default function SemFoto(p: { slug: string; nome: string; precos: Record<
         <ul className="grid grid-cols-2 gap-2">
           {sugestoes.map((e) => (
             <CardEstilo key={e.id} id={e.id} tom={e.tom} nome={e.nome}>
-              {p.precos[e.id] != null && <p className="text-card text-brand">{brl(p.precos[e.id])}</p>}
+              {p.precos[e.id] != null && <p className="text-h4 text-text">{brl(p.precos[e.id])}</p>}
               <Button size="sm" loading={enviado === e.id} onClick={() => quero(e.id, e.nome)} className="mt-1 w-full">Quero esse!</Button>
             </CardEstilo>
           ))}

@@ -36,17 +36,16 @@ After each image, tell me the file name (for example "nevou") and wait for me to
 # Prompt para as 3 imagens que ainda faltam (use no MESMO chat das anteriores)
 
 Já existem: nevou, nevou-barba, buzz-platinado, loiro-pivete, social, degrade e buzz.
-Faltam 3 para completar o catálogo (com elas, as duas abas ficam com número par de cartões):
+Faltam 2 para completar a aba Fim de Ano (6 cartões). A aba Cortes já está completa com 4 (inclui "Raspado (zero)", feito com o manequim careca):
 
 ```
-Using the same two base images from this conversation (dark slate mannequin base and original light mannequin base), generate 3 more images, ONE PER MESSAGE, keeping EVERYTHING identical (same mannequin, pose, camera angle, framing, background, lighting, color grading, 1:1 square) and changing ONLY the hair:
+Using the same two base images from this conversation (dark slate mannequin base and original light mannequin base), generate 2 more images, ONE PER MESSAGE, keeping EVERYTHING identical (same mannequin, pose, camera angle, framing, background, lighting, color grading, 1:1 square) and changing ONLY the hair:
 
 1) reflexo-alinhado [DARK mannequin]: dark chocolate-brown short textured hair with strong, even, aligned light-blonde highlights (uniform foil highlights clearly visible), low fade on the sides. The highlights must stand out clearly against the dark base hair and the mannequin.
 2) nevou-topete [DARK mannequin]: full icy platinum-blonde bleached hair (near white), longer textured top styled up and back into a voluminous quiff, low taper fade on the sides.
-3) degrade-barba [LIGHT mannequin]: natural dark brown short textured top with a mid skin fade on the sides, plus a short, neatly lined-up dark brown beard.
 
 After each image, tell me the file name. If any image drifts from the base, regenerate it before showing me.
 ```
 
-Arquivos: `reflexo-alinhado.jpg`, `nevou-topete.jpg`, `degrade-barba.jpg` (1080×1080, JPG ~80).
+Arquivos: `reflexo-alinhado.jpg`, `nevou-topete.jpg` (1080×1080, JPG ~80).
 O app só mostra um estilo quando a foto dele existe, então pode mandar uma de cada vez.
