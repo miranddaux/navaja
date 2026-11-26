@@ -1,8 +1,9 @@
 import { Suspense } from "react";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ESTILOS } from "@/lib/catalog";
-import { FotoEstilo } from "@/components/FotoEstilo";
+import { CardEstilo } from "@/components/CardEstilo";
+import { CardIa } from "@/components/CardIa";
+import { Pill } from "@/components/Pill";
 import { Progress } from "@/components/Progress";
 import { createClient } from "@/lib/supabase/server";
 
@@ -30,7 +31,7 @@ async function Catalogo({ searchParams }: { searchParams: PageProps<"/fim-de-ano
   const supabase = await createClient();
   const { data: barbearia } = await supabase
     .from("barbershops")
-    .select("name, credit_wallets(balance, quota)")
+    .select("name, slug, credit_wallets(balance, quota)")
     .maybeSingle();
   if (!barbearia) redirect("/barbearia/nova");
   const w = Array.isArray(barbearia.credit_wallets) ? barbearia.credit_wallets[0] : barbearia.credit_wallets;
@@ -49,6 +50,8 @@ async function Catalogo({ searchParams }: { searchParams: PageProps<"/fim-de-ano
         )}
       </header>
 
+      <div className="md:max-w-[448px]"><CardIa href={`/b/${barbearia.slug}/nevou`} /></div>
+
       {/* Bloco 2: catálogo (16 entre título, filtros e lista) */}
       <section aria-labelledby="catalogo" className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
@@ -58,22 +61,13 @@ async function Catalogo({ searchParams }: { searchParams: PageProps<"/fim-de-ano
 
         <nav aria-label="Categorias" className="flex gap-2">
           {ABAS.map((t) => (
-            <Link key={t.k} href={t.href} aria-current={categoria === t.k ? "page" : undefined}
-              className={`flex h-10 items-center rounded-full border px-4 text-label transition ${categoria === t.k ? "border-brand-pressed bg-brand text-bg" : "border-line bg-surface text-text-2 hover:text-text"}`}>
-              {t.label}
-            </Link>
+            <Pill key={t.k} href={t.href} ativo={categoria === t.k}>{t.label}</Pill>
           ))}
         </nav>
 
         <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:gap-4 lg:grid-cols-4">
           {estilos.map((e) => (
-            <li key={e.id} className="overflow-hidden rounded-md border border-line bg-surface">
-              <FotoEstilo id={e.id} tom={e.tom} className="aspect-square" />
-              <div className="flex flex-col gap-1 p-4">
-                <p className="text-h4">{e.nome}</p>
-                <p className="text-caption text-text-2">{e.descricao}</p>
-              </div>
-            </li>
+            <CardEstilo key={e.id} id={e.id} tom={e.tom} nome={e.nome} />
           ))}
         </ul>
       </section>

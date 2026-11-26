@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { Button } from "@/components/Button";
 import { Field } from "@/components/Field";
-import { FormatoRostoIcone } from "@/components/FormatoRostoIcone";
-import { FotoEstilo } from "@/components/FotoEstilo";
+import { CardEstilo } from "@/components/CardEstilo";
+import { CardRosto } from "@/components/CardRosto";
 import { ESTILOS, FORMATOS, SUGESTOES, type FormatoRosto } from "@/lib/catalog";
 import { createClient } from "@/lib/supabase/client";
 import { mascaraTelefone, soDigitos, validarNome, validarTelefone } from "@/lib/validate";
@@ -60,24 +60,24 @@ export default function SemFoto(p: { slug: string; nome: string; preco: number |
 
   if (vendo && formato) {
     const sugestoes = SUGESTOES[formato].map((id) => ESTILOS.find((e) => e.id === id)!);
+    const nomeFormato = FORMATOS.find((f) => f.id === formato)!.nome.toLowerCase();
     return (
       <div className="flex flex-col gap-6">
-        <div className="flex flex-col gap-2">
-          <h2 className="text-h3">Combinam com rosto {FORMATOS.find((f) => f.id === formato)!.nome.toLowerCase()}</h2>
-          <p className="text-body-sm text-text-2">Escolha o que mais gostou e fale com a barbearia.</p>
+        <div className="flex flex-col gap-4">
+          <p className="flex w-fit items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-caption text-text-2">
+            Para: <span className="text-text">{nome.trim()} · Rosto {nomeFormato}</span>
+          </p>
+          <div className="flex flex-col gap-2">
+            <h2 className="text-h3">Sugestões pra você</h2>
+            <p className="text-body-sm text-text-2">Estes estilos combinam com rosto {nomeFormato}. Escolha um e fale com a barbearia.</p>
+          </div>
         </div>
-        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <ul className="grid grid-cols-2 gap-2">
           {sugestoes.map((e) => (
-            <li key={e.id} className="flex flex-col overflow-hidden rounded-md border border-line bg-surface">
-              <FotoEstilo id={e.id} tom={e.tom} className="aspect-square" />
-              <div className="flex flex-col gap-4 p-4">
-                <div className="flex flex-col gap-1">
-                  <p className="text-h4">{e.nome}</p>
-                  {preco && <p className="text-caption text-brand">{preco}</p>}
-                </div>
-                <Button size="sm" loading={enviado === e.id} onClick={() => quero(e.id, e.nome)}>Quero esse!</Button>
-              </div>
-            </li>
+            <CardEstilo key={e.id} id={e.id} tom={e.tom} nome={e.nome}>
+              {preco && <p className="text-caption text-brand">{preco}</p>}
+              <Button size="sm" loading={enviado === e.id} onClick={() => quero(e.id, e.nome)} className="mt-1 w-full">Quero esse!</Button>
+            </CardEstilo>
           ))}
         </ul>
         <p className="text-caption text-text-2">Sugestões pelo formato do rosto. A barbearia confirma o melhor corte na cadeira.</p>
@@ -92,15 +92,11 @@ export default function SemFoto(p: { slug: string; nome: string; preco: number |
         <p className="text-body-sm text-text-2">Escolha o formato do seu rosto e veja os estilos que mais combinam.</p>
       </div>
 
-      <fieldset className="flex flex-col">
-        <legend className="mb-4 text-h4"><span className="mr-2 text-brand">1</span>Formato do rosto</legend>
-        <div className="grid grid-cols-3 gap-2">
+      <fieldset className="flex flex-col gap-4">
+        <legend className="text-h4"><span className="mr-2 text-brand">1</span>Selecione o formato do rosto</legend>
+        <div className="grid grid-cols-2 gap-2">
           {FORMATOS.map((f) => (
-            <button type="button" key={f.id} onClick={() => setFormato(f.id)} aria-pressed={formato === f.id}
-              className={`flex min-h-[96px] flex-col items-center justify-center gap-2 rounded-md border p-2 text-caption transition active:scale-95 ${formato === f.id ? "border-brand bg-surface-3 text-text" : "border-line bg-surface text-text-2 hover:text-text"}`}>
-              <FormatoRostoIcone formato={f.id} />
-              {f.nome}
-            </button>
+            <CardRosto key={f.id} formato={f.id} nome={f.nome} selecionado={formato === f.id} onSelecionar={() => setFormato(f.id)} />
           ))}
         </div>
       </fieldset>

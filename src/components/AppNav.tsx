@@ -28,14 +28,14 @@ export function AppNav({ itens, variante }: { itens: NavItem[]; variante: "topo"
     );
   }
   return (
-    <nav aria-label="Principal" className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-bg/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden print:hidden">
-      <ul className="mx-auto flex max-w-[430px]">
+    <nav aria-label="Principal" className="fixed inset-x-4 bottom-[calc(16px+env(safe-area-inset-bottom))] z-20 mx-auto max-w-[359px] rounded-full border border-line bg-bg px-6 py-2 shadow-[0_8px_16px_rgba(0,0,0,0.64),0_2px_4px_rgba(0,0,0,0.4)] md:hidden print:hidden">
+      <ul className="flex items-center justify-between">
         {itens.map((i) => {
           const Icone = ICONES[i.icone];
           return (
-            <li key={i.href} className="flex-1">
+            <li key={i.href}>
               <Link href={i.href} aria-current={ativo(i.href) ? "page" : undefined}
-                className={`flex min-h-[56px] flex-col items-center justify-center gap-1 text-caption transition active:scale-95 ${ativo(i.href) ? "text-brand" : "text-text-2"}`}>
+                className={`flex min-h-[56px] min-w-[56px] flex-col items-center justify-center gap-1 text-label transition active:scale-95 ${ativo(i.href) ? "text-brand" : "text-text-2"}`}>
                 <Icone /> {i.label}
               </Link>
             </li>

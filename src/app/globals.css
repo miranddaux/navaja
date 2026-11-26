@@ -8,7 +8,10 @@
   /* Neutros */
   --color-bg: #0a0a0a;
   --color-surface: #1c1c1c; /* "surface-2" do Figma: cards e inputs */
+  --color-surface-1: #111111; /* cards sobre o fundo */
   --color-surface-3: #252525;
+  --color-border-strong: #383838;
+  --color-brand-subtle: #1e150a; /* fundo de item selecionado */
   --color-line: #2a2a2a; /* "neutral/border" */
   --color-text: #f5f5f5;
   --color-text-2: #888888;

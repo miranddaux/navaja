@@ -32,7 +32,7 @@ export async function AppChrome({ children }: { children: ReactNode }) {
           </form>
         </div>
       </header>
-      <div id="conteudo" className="flex-1 pb-[calc(88px+env(safe-area-inset-bottom))] md:pb-12 print:pb-0">{children}</div>
+      <div id="conteudo" className="flex-1 pb-[calc(112px+env(safe-area-inset-bottom))] md:pb-12 print:pb-0">{children}</div>
       <AppNav itens={itens} variante="base" />
     </div>
   );

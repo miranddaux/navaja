@@ -8,7 +8,7 @@ import SemFoto from "./sem-foto";
 import { ESTILOS } from "@/lib/catalog";
 import { mascaraTelefone, soDigitos, validarNome, validarTelefone } from "@/lib/validate";
 
-const estilos = ESTILOS.filter((e) => e.categoria === "fim-de-ano");
+const estilos = ESTILOS.filter((e) => e.selfie);
 
 // Reduz a foto para resolução de celular (máx. 1024 px) antes de enviar.
 async function reduzir(file: File): Promise<string> {
