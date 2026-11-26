@@ -93,7 +93,7 @@ export default function SemFoto(p: { slug: string; nome: string; precos: Record<
       </div>
 
       <fieldset className="flex flex-col gap-4">
-        <legend className="text-h4"><span className="mr-2 text-brand">1</span>Selecione o formato do rosto</legend>
+        <legend className="text-h3"><span className="mr-3 inline-flex size-6 items-center justify-center rounded-full border border-brand-pressed bg-brand-subtle align-middle text-label text-brand">1</span>Selecione o formato do rosto</legend>
         <div className="grid grid-cols-2 gap-2">
           {FORMATOS.map((f) => (
             <CardRosto key={f.id} formato={f.id} nome={f.nome} selecionado={formato === f.id} onSelecionar={() => setFormato(f.id)} />
@@ -102,7 +102,7 @@ export default function SemFoto(p: { slug: string; nome: string; precos: Record<
       </fieldset>
 
       <div className="flex flex-col gap-4">
-        <p className="text-h4"><span className="mr-2 text-brand">2</span>Seus dados</p>
+        <p className="text-h3"><span className="mr-3 inline-flex size-6 items-center justify-center rounded-full border border-brand-pressed bg-brand-subtle align-middle text-label text-brand">2</span>Seus dados</p>
         <div className="flex flex-col gap-6">
           <Field id="sf-nome" label="Seu nome" autoComplete="given-name" placeholder="Como te chamamos?" value={nome} onChange={setNome} estado={vNome} />
           <Field id="sf-wpp" label="Seu WhatsApp" type="tel" inputMode="tel" autoComplete="tel-national" placeholder="(17) 99999-8888"
@@ -119,7 +119,7 @@ export default function SemFoto(p: { slug: string; nome: string; precos: Record<
       <div className="flex flex-col gap-2">
         <Button type="submit" loading={carregando} disabled={!pronto}>Ver sugestões</Button>
         {!pronto && <p className="text-center text-caption text-text-2">Falta: {faltando.join(", ")}.</p>}
-        <Button type="button" variant="ghost" onClick={p.onVoltar}>Voltar e enviar uma selfie</Button>
+        <Button type="button" variant="secondary" onClick={p.onVoltar}>Voltar e enviar uma selfie</Button>
       </div>
     </form>
   );

@@ -5,7 +5,7 @@ import { Button } from "./Button";
 import { IconCheck, IconCopiar } from "./Icons";
 import { useToast } from "./Toast";
 
-export function CopyButton({ texto, rotulo = "Copiar link" }: { texto: string; rotulo?: string }) {
+export function CopyButton({ texto, rotulo = "Copiar link", className = "" }: { texto: string; rotulo?: string; className?: string }) {
   const [copiado, setCopiado] = useState(false);
   const toast = useToast();
 
@@ -21,7 +21,7 @@ export function CopyButton({ texto, rotulo = "Copiar link" }: { texto: string; r
   }
 
   return (
-    <Button type="button" variant="secondary" size="md" onClick={copiar} className="gap-2 px-4">
+    <Button type="button" variant="secondary" size="md" onClick={copiar} className={`gap-2 px-4 ${className}`}>
       {copiado ? <IconCheck /> : <IconCopiar />}
       {copiado ? "Copiado" : rotulo}
     </Button>

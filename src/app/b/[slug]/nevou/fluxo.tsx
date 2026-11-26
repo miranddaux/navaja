@@ -175,7 +175,7 @@ export default function FluxoNevou(p: { slug: string; nome: string; precos: Reco
 
       <form onSubmit={gerar} noValidate className="flex flex-col gap-8">
         <fieldset className="flex flex-col">
-          <legend className="mb-4 text-h4"><span className="mr-2 text-brand">1</span>Escolha o estilo</legend>
+          <legend className="mb-4 text-h3"><span className="mr-3 inline-flex size-6 items-center justify-center rounded-full border border-brand-pressed bg-brand-subtle align-middle text-label text-brand">1</span>Escolha o estilo</legend>
           <div className="grid grid-cols-2 gap-2">
             {estilos.map((e) => (
               <button
@@ -195,7 +195,7 @@ export default function FluxoNevou(p: { slug: string; nome: string; precos: Reco
         </fieldset>
 
         <div className="flex flex-col gap-4">
-          <p className="text-h4"><span className="mr-2 text-brand">2</span>Seus dados</p>
+          <p className="text-h3"><span className="mr-3 inline-flex size-6 items-center justify-center rounded-full border border-brand-pressed bg-brand-subtle align-middle text-label text-brand">2</span>Seus dados</p>
           <div className="flex flex-col gap-6">
           <Field id="nome" label="Seu nome" autoComplete="given-name" placeholder="Como te chamamos?" value={nome} onChange={setNome} estado={vNome} />
           <Field id="wpp" label="Seu WhatsApp" type="tel" inputMode="tel" autoComplete="tel-national" placeholder="(17) 99999-8888"
@@ -204,7 +204,7 @@ export default function FluxoNevou(p: { slug: string; nome: string; precos: Reco
         </div>
 
         <div className="flex flex-col gap-4">
-          <p className="text-h4"><span className="mr-2 text-brand">3</span>Sua selfie</p>
+          <p className="text-h3"><span className="mr-3 inline-flex size-6 items-center justify-center rounded-full border border-brand-pressed bg-brand-subtle align-middle text-label text-brand">3</span>Sua selfie</p>
           <label htmlFor="foto" className="flex min-h-[96px] cursor-pointer items-center gap-4 rounded-md border border-dashed border-line bg-surface p-4 transition hover:border-brand">
             {previa ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -243,7 +243,7 @@ export default function FluxoNevou(p: { slug: string; nome: string; precos: Reco
           {!pronto && estado !== "gerando" && (
             <p className="text-center text-caption text-text-2">Falta: {faltando.join(", ")}.</p>
           )}
-          <Button type="button" variant="ghost" size="md" onClick={() => setSemFoto(true)}>Prefiro não enviar foto</Button>
+          <Button type="button" variant="secondary" size="md" onClick={() => setSemFoto(true)}>Prefiro não enviar foto</Button>
         </div>
       </form>
     </main>

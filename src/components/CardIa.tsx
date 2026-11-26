@@ -12,7 +12,7 @@ export function CardIa({ href }: { href: string }) {
         <h2 className="uppercase text-[24px] leading-[1.1] tracking-[-0.01em]" style={{ fontFamily: "var(--font-display)", fontWeight: 700 }}>
           Prova virtual com IA
         </h2>
-        <p className="max-w-[240px] text-body-sm text-[rgba(245,245,245,0.9)]">Mostre ao cliente como o Nevou fica nele, na hora.</p>
+        <p className="text-body text-[rgba(245,245,245,0.9)]">Mostre ao cliente como o<br />Nevou fica nele, na hora.</p>
       </div>
       <ButtonLink href={href} size="sm" className="w-full" target="_blank">Abrir prova virtual</ButtonLink>
     </section>

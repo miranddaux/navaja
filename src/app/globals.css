@@ -74,8 +74,3 @@ input, textarea, select { font: inherit; }
   * { transition: none !important; animation: none !important; }
 }
 
-/* Impressão da arte do display (A6): sem margens, fundo e cores preservados */
-@media print {
-  @page { size: A6 portrait; margin: 0; }
-  html, body { background: #0a0a0a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-}

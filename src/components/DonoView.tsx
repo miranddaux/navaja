@@ -1,3 +1,4 @@
+import { ButtonLink } from "./Button";
 import { Progress } from "./Progress";
 import { brl, data } from "@/lib/format";
 import type { PainelDono } from "@/lib/dono";
@@ -54,6 +55,7 @@ export function DonoView({ d }: { d: PainelDono }) {
                     <div><dt className="text-caption text-text-2">Quiseram</dt><dd className="text-h4">{b.quer_mes}</dd></div>
                     <div><dt className="text-caption text-text-2">Desde</dt><dd className="text-h4">{data(b.criada)}</dd></div>
                   </dl>
+                  <ButtonLink href={`/api/qr?slug=${b.slug}`} size="sm" variant="secondary" className="w-full">Baixar QR (PNG)</ButtonLink>
                 </li>
               ))}
             </ul>
@@ -68,6 +70,7 @@ export function DonoView({ d }: { d: PainelDono }) {
                     <th scope="col" className="p-4 text-right font-medium">Simulações</th>
                     <th scope="col" className="p-4 text-right font-medium">Quiseram</th>
                     <th scope="col" className="p-4 text-right font-medium">Desde</th>
+                    <th scope="col" className="p-4 text-right font-medium">QR</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-line text-body-sm">
@@ -86,6 +89,7 @@ export function DonoView({ d }: { d: PainelDono }) {
                       <td className="p-4 text-right text-h4">{b.sims_mes}</td>
                       <td className="p-4 text-right text-h4">{b.quer_mes}</td>
                       <td className="p-4 text-right text-text-2">{data(b.criada)}</td>
+                      <td className="p-4 text-right"><ButtonLink href={`/api/qr?slug=${b.slug}`} size="sm" variant="secondary">Baixar PNG</ButtonLink></td>
                     </tr>
                   ))}
                 </tbody>

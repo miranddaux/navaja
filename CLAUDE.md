@@ -45,3 +45,8 @@ Painel do dono: rota `/dono`, só para quem está em `platform_admins` (RPC `eh_
 Tabela `precos_estilos` (barbershop_id, style_id, preco). Cadastro rápido (`PrecosEditor`: "mesmo valor em todos" + ajuste por corte) e edição em `/precos`. A página do cliente (`barbearia_publica`) recebe todos os preços; o painel estima a receita por "Quero esse!" × preço do corte escolhido.
 ## Catálogo
 O app só mostra estilos com foto em `public/catalogo` (lista gerada no build por `scripts/gerar-fotos.mjs`). Abas com número ímpar de fotos ganham um cartão "Novo estilo em breve" (nunca um buraco nem cartão largo). Cortes = degradê, social, buzz, raspado (zero); Fim de Ano = 6 quando chegarem reflexo-alinhado e nevou-topete. Selfie com IA só nos estilos com `selfie: true`.
+
+## Login, painel e arte
+- Login por e-mail com **código de 6 números** (e link, se o template do Supabase trouxer os dois). Foto de fundo opcional em `public/hero.jpg` (sem o arquivo, aparece o degradê de marca).
+- Painel do barbeiro mostra o **QR na tela** (sem botão de baixar nem arte de display: a arte é feita pelo Miranda). O QR em PNG de cada barbearia é baixado no **painel do dono** (`/dono`, botão "Baixar PNG"), para usar na arte do display.
+- Estilos que faltam foto: `reflexo-alinhado` e `nevou-topete` (Fim de Ano).

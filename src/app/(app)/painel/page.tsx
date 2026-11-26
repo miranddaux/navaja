@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
+import QRCode from "qrcode";
 import { createClient } from "@/lib/supabase/server";
 import { PainelView } from "@/components/PainelView";
 
@@ -41,11 +42,14 @@ async function Painel() {
     ...(semFoto ?? []).map((i) => ({ ...i, semFoto: true })),
   ].sort((a, b) => b.created_at.localeCompare(a.created_at));
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
+  const qr = await QRCode.toString(`${siteUrl}/b/${b.slug}/nevou`, { type: "svg", margin: 0, errorCorrectionLevel: "H", color: { dark: "#0a0a0a", light: "#ffffff" } });
+
   return (
-    <PainelView
+    <PainelView qr={qr}
       nome={b.name} slug={b.slug} precos={Object.fromEntries((b.precos_estilos ?? []).map((x) => [x.style_id, Number(x.preco)]))}
       saldo={w?.balance ?? 0} cota={w?.quota ?? 0}
-      siteUrl={process.env.NEXT_PUBLIC_SITE_URL || ""}
+      siteUrl={siteUrl}
       simulacoes={lista.length}
       leads={leads}
     />
